@@ -1,0 +1,91 @@
+const apiMethods = {
+    methods: {
+        get(url, data) {
+            return new Promise((resolve, reject) => {
+                let vueObj = this;
+                // Add a request interceptor
+                this.$axios.interceptors.request.use(function (config) {
+                    // Do something before request is sent
+                    vueObj.loading = true;
+
+                    return config;
+                }, function (error) {
+                    // Do something with request error
+                    return Promise.reject(error);
+                });
+                this.$axios.get(url, data).then((response) => {
+                    vueObj.loading = false;
+                    resolve(response.data);
+                }, (response) => {
+                    vueObj.loading = false;
+                    reject(response);
+                    console.log("请求超时，请检查网络")
+                })
+            })
+        },
+        post(url, data) {
+            return new Promise((resolve, reject) => {
+                let vueObj = this;
+                // Add a request interceptor
+                this.$axios.interceptors.request.use(function (config) {
+                    // Do something before request is sent
+                    vueObj.loading = true;
+
+                    return config;
+                }, function (error) {
+                    // Do something with request error
+                    return Promise.reject(error);
+                });
+                this.$axios.post(url, data).then((response) => {
+                    vueObj.loading = false;
+                    resolve(response.data);
+                }).catch((response) => {
+                    //console.log('f', response)
+                    vueObj.loading = false;
+                    reject(response);
+                    console.log("请求超时，请检查网络");
+                })
+            })
+        },
+        /**
+         * 消息消失框
+         */
+        toast(msg = '', time = 2000) {
+            var toast = document.createElement('div')
+            toast.className = 'common-toast common-toast-show'
+            toast.innerHTML = msg
+            document.body.appendChild(toast)
+            toast.style.display = 'block'
+            //toast.style.margin = `-${toast.offsetHeight / 2}px 0 0 -${toast.offsetWidth / 2}px`
+            var timer = setTimeout(() => {
+                toast.className = 'common-toast common-toast-hide'
+                clearTimeout(timer)
+                var timer2 = setTimeout(() => {
+                    document.body.removeChild(toast)
+                    clearTimeout(timer2)
+                }, 200)
+            }, time)
+        },
+        handelResponse(res, cb, errCb) {
+            //_g.closeGlobalLoading()
+            //if (res.success == true) {
+            if (res.code == 200) {
+                console.log("ok")
+                cb(res.data)
+            } else {
+                /*if (typeof errCb == 'function') {
+                  console.log("~~~~~typeof")
+                  errCb()
+                }*/
+                //接口调用返回失败的处理
+                console.log("res.code = " + res.code)
+                this.handleError(res)
+            }
+        },
+        handleError(res) {
+            //if (res.success == 101) {
+            console.log("Error")
+        }
+    }
+}
+export default apiMethods

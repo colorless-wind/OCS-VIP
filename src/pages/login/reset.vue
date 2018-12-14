@@ -1,0 +1,284 @@
+<style lang="less" scoped>
+    @import "../../assets/less/config";
+
+    #resetPage .form {
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    #resetPage .line {
+        padding: 10px 0;
+        text-align: center;
+        position: relative;
+    }
+
+    #resetPage .icon {
+        width: 20px;
+        position: absolute;
+        top: 18px;
+        left: 10px;
+    }
+
+    #resetPage .text {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 5px 5px 5px 45px;
+        line-height: 28px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+        background-color: aliceblue;
+    }
+
+
+    @media (max-width:320px) {
+        #resetPage .line {
+            padding: 10px 0;
+            text-align: center;
+            position: relative;
+        }
+        #resetPage .icon {
+            width: 20px;
+            position: absolute;
+            top: 18px;
+            left: 10px;
+        }
+        #resetPage .text {
+            font-size: 12px;
+        }
+
+    }
+
+    #resetPage .btn {
+        width: 50%;
+        line-height: 38px;
+        border-radius: 5px;
+        /*border: 1px solid darken(@main, 3%);*/
+        border: none;
+        font-size: 14px;
+        color: #fff;
+        background-color: #62a8ea;
+    }
+
+    #resetPage .banner {
+        width: 100%;
+        margin-bottom: 30px;
+    }
+
+    #resetPage .go-login {
+        float: left;
+        padding-left: 20px;
+        color: #999;
+    }
+
+    #resetPage .verify-input {
+        width: 50%;
+    }
+
+    #resetPage .verify-btn {
+        width: 45%;
+        /*background-color: lightgray;*/
+        background-color: lightcoral;
+        margin-left: 3%;
+    }
+
+</style>
+<template>
+	<div>
+		<v-header title=""></v-header>
+		<v-content id="resetPage">
+            <!--* banner *-->
+			<img src="../../assets/images/login/banner.jpg" class="banner" />
+			<form class="form" @submit.prevent="submit">
+                <!--* 用户名 *-->
+				<div class="line">
+					<img src="../../assets/images/login/phone.png" class="icon" />
+					<input class="text" type="tel" :placeholder="CONST.PLACEHOLDER.phone" maxlength="11" v-model="form.username">
+				</div>
+                <!--* 验证码 *-->
+				<div class="line" style="text-align: left;">
+					<img src="../../assets/images/login/verify.png" class="icon" />
+					<input class="text verify-input" type="tel" :placeholder="CONST.PLACEHOLDER.vcode" maxlength="6" v-model="form.verifycode">
+					<button type="button" class="btn verify-btn" @click="createVerifyCode" :disabled="vTimer != 60">{{vTimer == 60 ?'获取验证码':vTimer + ' s'}}</button>
+				</div>
+                <!--* 新密码 *-->
+                <div class="line">
+					<img src="../../assets/images/login/password.png" class="icon" />
+					<input class="text" type="password" :placeholder="CONST.PLACEHOLDER.newPwd" maxlength="11" v-model="form.password">
+				</div>
+                <!--* 确认新密码 *-->
+				<div class="line">
+					<img src="../../assets/images/login/password.png" class="icon" />
+					<input class="text" type="password" :placeholder="CONST.PLACEHOLDER.newPwdConfirm" maxlength="11" v-model="form.confirmPassword">
+				</div>
+                <!--* 提交按钮 *-->
+				<div class="line">
+					<button class="btn" type="button" @click="checkFormInfo">提交</button>
+				</div>
+                <!--* 其它链接按钮 *-->
+				<div class="line">
+					<span class="go-login">已有账号？<span style="color: lightcoral" @click="goLogin">去登录</span></span>
+				</div>
+			</form>
+		</v-content>
+        <!--* 加载动画 load true/false 显示/隐藏；type 1-7 7种样式 *-->
+        <v-loading :type="1" :load="loading" :msg="loadingMsg"></v-loading>
+	</div>
+</template>
+<script>
+    //* 引用工具函数包并以混入的形式加载
+    import util from '../../assets/js/util'
+
+    export default {
+        data() {
+            return {
+                //* 提交表单信息
+                form: {
+                    username: '',
+                    password: '',
+                    confirmPassword: '',
+                    verifycode: ''
+                },
+                //* 验证码计时
+                vTimer: 60,
+                //* 是否启用加载动画
+                enableLoading: true,
+                //* 加载动画显示状态
+                loading: false,
+                //* 加载动画提示文字
+                loadingMsg: '',
+            }
+        },
+        methods: {
+            /**
+             * 功能 重置密码
+             * 参数 无
+             * 返回 无
+             **/
+            resetPassword() {
+                //* 设定加载提示信息
+                this.loadingMsg = this.CONST.MSG.resetPwdLoading;
+                //* 发送请求
+                this.post(this.CONST.BASE_URL, this.getSendData({
+                    smsCode: this.form.verifycode,
+                    username: this.form.username,
+                    password: this.$md5(this.form.password),
+                }, this.CONST.APP_ID, this.CONST.METHOD.resetPwd, this.CONST.PWD), this).then((response) => {
+                    console.log('访问成功');
+                    console.log(response);
+                    if (0 == response.subStatus && 0 == response.status) {
+                        this.toast(this.CONST.MSG.resetPwdSuccess);
+                        //* 跳转至登录页面
+                        this.goLogin();
+                    } else {
+                        if (0 != response.status) {
+                            this.toast("操作异常， 异常信息为：" + response.errorMsg);
+                        }
+                        if (0 != response.subStatus) {
+                            this.toast("系统异常， 异常信息为：" + response.subErrorMsg);
+                        }
+                    }
+                }).catch((err) => {
+                    console.warn(err);
+                })
+            },
+            /**
+             * 功能 验证码1分钟计时器
+             * 参数 无
+             * 返回 无
+             **/
+            verifyCodeTimer() {
+                //* 获取全局Vue对象
+                var global = this;
+                var timerEvent = setInterval(function() {
+                    global.vTimer--;
+                    if (global.vTimer < 1) {
+                        global.vTimer = 60;
+                        clearInterval(timerEvent);
+                    }
+                }, 1000)
+            },
+            /**
+             * 功能 获取验证码
+             * 参数 无
+             * 返回 无
+             **/
+            createVerifyCode() {
+                //* 校验手机号
+                if (!this.CONST.REGEX.phone.test(this.form.username)) {
+                    this.toast(this.CONST.MSG.phoneCheck);
+                    return false;
+                }
+                //* 设定加载提示信息
+                this.loadingMsg = this.CONST.MSG.vcodeLoading;
+                //* 发送请求
+                this.post(this.CONST.BASE_URL, this.getSendData({
+                    phone: this.form.username,
+                    type: 1,
+                }, this.CONST.APP_ID, this.CONST.METHOD.vcode, this.CONST.PWD), this).then((response) => {
+                    console.log('访问成功');
+                    console.log(response);
+                    if (0 == response.subStatus && 0 == response.status) {
+                        //* 开始计时，1分钟可再次获取验证码
+                        this.verifyCodeTimer();
+                    } else {
+                        if (0 != response.status) {
+                            this.toast("操作异常， 异常信息为：" + response.errorMsg);
+                        }
+                        if (0 != response.subStatus) {
+                            this.toast("系统异常， 异常信息为：" + response.subErrorMsg);
+                        }
+                    }
+                }).catch((err) => {
+                    console.warn(err);
+                })
+            },
+            /**
+             * 功能 校验表单信息
+             * 参数 无
+             * 返回 无
+             **/
+            checkFormInfo() {
+                //* 校验手机号
+                if (!this.CONST.REGEX.phone.test(this.form.username)) {
+                    this.toast(this.CONST.MSG.phoneCheck);
+                    return false;
+                }
+                //* 校验验证码
+                if (!this.CONST.REGEX.vcode.test(this.form.verifycode)) {
+                    this.toast(this.CONST.MSG.vcodeCheck);
+                    return false;
+                }
+                //* 校验新密码
+                if (!this.CONST.REGEX.pwd.test(this.form.password)) {
+                    this.toast(this.CONST.MSG.pwdCheck);
+                    return false;
+                }
+                //* 校验确认新密码
+                if (!this.CONST.REGEX.pwd.test(this.form.confirmPassword)) {
+                    this.toast(this.CONST.MSG.pwdConfirmCheck);
+                    return false;
+                }
+                //* 校验新密码与确认新密码是否一致
+                if (this.form.confirmPassword !== this.form.password) {
+                    this.toast(this.CONST.MSG.pwdConfirmSameCheck);
+                    return false;
+                }
+                //* 发送重置密码请求
+                this.resetPassword();
+            },
+            /**
+             * 功能 跳转登录页面
+             * 参数 无
+             * 返回 无
+             **/
+            goLogin() {
+                this.$router.push({
+                    path: this.CONST.ROUTER.loginPage
+                })
+            }
+        },
+        mixins: [util]
+    }
+
+</script>

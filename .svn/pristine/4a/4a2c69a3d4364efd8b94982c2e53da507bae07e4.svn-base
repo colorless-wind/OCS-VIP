@@ -1,0 +1,127 @@
+import HelloWorld from '@/components/HelloWorld'
+
+import App from '../App'
+
+import Login from '../pages/login/login'
+import Reset from '../pages/login/reset'
+import Register from '../pages/login/register'
+import AD from '../pages/login/ad'
+import Index2 from '../pages/index/index2'
+import ActivityList from '../pages/activity/list'
+import ActivityDetail from '../pages/activity/detail'
+import TransactionList from '../pages/transaction/list'
+import TransactionDetail from '../pages/transaction/detail'
+import Charge from '../pages/charge/index'
+import VipCardDetail from '../pages/vipCard/detail'
+
+/**
+ * auth true登录才能访问，false不需要登录，默认true
+ */
+export default [
+    {
+        path: '/',
+        component: App,
+        children: [
+            {
+                path: '/login/login/', // 登录
+                meta: {
+                    auth: false,
+                    keepAlive: false, //此组件不需要被缓存 
+                },
+                component: Login
+      },
+            {
+                path: '/login/reset/', // 重置密码
+                meta: {
+                    auth: false,
+                    keepAlive: false, //此组件不需要被缓存 
+                },
+                component: Reset
+      },
+            {
+                path: '/login/register/', // 注册
+                meta: {
+                    auth: false,
+                    keepAlive: false, //此组件不需要被缓存 
+                },
+                component: Register
+      },
+            {
+                path: '/login/advertisement/', // 广告
+                meta: {
+                    auth: false,
+                    keepAlive: false, //此组件不需要被缓存 
+                },
+                component: AD
+      },
+            {
+                path: '/index/index/', // 首页
+                meta: {
+                    auth: false,
+                    keepAlive: false, //此组件不需要被缓存 
+                },
+                component: Index2
+      },
+            {
+                path: '/activity/list/', // 活动信息列表
+                meta: {
+                    auth: false,
+                    keepAlive: true, //此组件不需要被缓存 
+                },
+                component: ActivityList
+      },
+            {
+                path: '/activity/detail/', // 活动信息详情
+                meta: {
+                    auth: false,
+                    keepAlive: false, //此组件不需要被缓存 
+                },
+                component: ActivityDetail
+      },
+            {
+                path: '/transaction/list/', // 交易信息列表
+                meta: {
+                    auth: false,
+                    keepAlive: false, //此组件不需要被缓存 
+                },
+                component: TransactionList
+      },
+            {
+                path: '/transaction/detail/', // 交易信息详情
+                meta: {
+                    auth: false,
+                    keepAlive: false, //此组件不需要被缓存 
+                },
+                component: TransactionDetail
+      },
+            {
+                path: '/charge/index/', // 充值首页
+                meta: {
+                    auth: false,
+                    keepAlive: false, //此组件不需要被缓存 
+                },
+                component: Charge
+      },
+            {
+                path: '/vipCard/detail/', // 会员卡详情
+                meta: {
+                    auth: false,
+                    keepAlive: false, //此组件不需要被缓存 
+                },
+                component: VipCardDetail
+      },
+            {
+                path: '/', // 首页
+                meta: {
+                    auth: false
+                },
+                component: Login
+      },
+            {
+                path: '*', // 其他页面
+                redirect: '/login/login/'
+      }
+
+    ]
+  }
+]

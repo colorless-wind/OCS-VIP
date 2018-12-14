@@ -1,0 +1,111 @@
+<style lang="less" scoped>
+	@import "../../assets/less/config";
+	#vipCardDetailPage .vipcard-detail {}
+	
+	#vipCardDetailPage .vipcard-detail h2 {
+		padding: 10px 25px;
+	}
+	
+	#vipCardDetailPage .vipcard-detail hr {
+		border: none;
+		border-bottom: 1px solid #ccc;
+		margin: 0 10px;
+	}
+	
+	#vipCardDetailPage .vipcard-detail .form {
+		margin: 10px;
+	}
+	
+	#vipCardDetailPage .vipcard-detail .form .item {
+		padding: 2px 15px;
+	}
+	
+	#vipCardDetailPage .vipcard-detail .form .item .label {
+		padding: 5px;
+		width: 22%;
+		font-size: 14px;
+		color: #999;
+		display: inline-block;
+		line-height: 1.8;
+	}
+	
+	#vipCardDetailPage .vipcard-detail .form .item .value {
+		padding: 5px;
+		width: 68%;
+		font-size: 14px;
+		display: inline-block;
+		text-align: right;
+		vertical-align: top;
+		text-align: justify;
+		line-height: 1.8;
+	}
+	
+	#vipCardDetailPage .vipcard-detail .form .item .tel-color {
+		color: #09bb07;
+	}
+</style>
+<template>
+	<div>
+		<v-header title=""></v-header>
+		<v-content id="vipCardDetailPage">
+			<div class="vipcard-detail">
+				<h2>会员卡详情</h2>
+				<hr>
+				<div class="form">
+					<div class="item">
+						<p class="label">特权说明</p>
+						<p class="value">{{data.info}}</p>
+					</div>
+					<div class="item">
+						<p class="label">有效日期</p>
+						<p class="value">{{data.activeDate}}</p>
+					</div>
+					<div class="item">
+						<p class="label">电话</p>
+						<p class="value">
+							<a :href="'tel:'+data.contact" class="tel-color">{{data.contact}}</a>
+						</p>
+					</div>
+					<div class="item">
+						<p class="label">使用须知</p>
+						<p class="value">{{data.description}}</p>
+					</div>
+				</div>
+			</div>
+		</v-content>
+	</div>
+</template>
+<script>
+	
+    //* 引用工具函数包并以混入的形式加载
+    import util from '../../assets/js/util'
+    //* 引用获取发送数据组件
+    import {
+        getSendData
+    } from '../../assets/js/proto'
+	import $ from 'jquery'
+	export default {
+		data() {
+			return {
+				data:{}
+			}
+		},
+		mounted() {
+			this.getData();
+		},
+		methods: {
+			getData() {
+				util.post('vipcard/detail', {
+					cardid: 904,
+				}, (response) => {
+					console.log(response);
+					this.data = response.data;
+				});
+			},
+			//该方法是用于提示该功能尚未开放，当商品下架的时候
+			test() {
+				this.toast('该功能尚未开放，敬请期待');
+			}
+		}
+	}
+</script>

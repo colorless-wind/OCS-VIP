@@ -1,0 +1,318 @@
+<style lang="less" scoped>
+    @import "../../assets/less/config";
+
+    #chargeIndexPage .charge-index {
+        margin: 0;
+    }
+
+    #chargeIndexPage .charge-index .banner {}
+
+    #chargeIndexPage .charge-index .banner img {
+        width: 100%;
+    }
+
+    #chargeIndexPage .charge-index .title {
+        padding: 5px 15px;
+        font-size: 16px;
+    }
+
+    #chargeIndexPage .charge-index hr {
+        margin-bottom: 10%;
+        border: none;
+        border-bottom: 1px solid #D9D9D9;
+    }
+
+    #chargeIndexPage .charge-index .charge-btn {
+        text-align: center;
+        padding: 10% 0;
+    }
+
+    #chargeIndexPage .charge-index .charge-btn button {
+        width: 50%;
+        line-height: 38px;
+        border-radius: 5px;
+        border: none;
+        font-size: 14px;
+        color: #fff;
+        background: #62a8ea;
+    }
+
+    #chargeIndexPage .charge-index .charge-input {
+        padding: 20px 15px;
+        font-size: 22px;
+    }
+
+    #chargeIndexPage .charge-index .charge-input input {
+        border: none;
+    }
+
+    #chargeIndexPage .charge-index .charge-input input::-webkit-input-placeholder {
+        /* WebKit, Blink, Edge */
+        color: #ccc;
+    }
+
+    #chargeIndexPage .charge-index .charge-input input:-moz-placeholder {
+        /* Mozilla Firefox 4 to 18 */
+        color: #ccc;
+    }
+
+    #chargeIndexPage .charge-index .charge-input input::-moz-placeholder {
+        /* Mozilla Firefox 19+ */
+        color: #ccc;
+    }
+
+    #chargeIndexPage .charge-index .charge-input input:-ms-input-placeholder {
+        /* Internet Explorer 10-11 */
+        color: #ccc;
+    }
+
+</style>
+<style>
+    /*#chargeIndexPage .charge-index .vux-radio-icon {
+        width: 30px;
+        height: auto;
+    }
+
+    #chargeIndexPage .weui-cells {
+        margin-top: 5px;
+    }
+
+    #chargeIndexPage .charge-index .weui-cells_radio .weui-check:checked+.weui-icon-checked:before {
+        color: #118ee9;
+    }*/
+
+</style>
+<template>
+<div>
+    <v-header title=""></v-header>
+    <v-content id="chargeIndexPage">
+        <div class="charge-index">
+            <div class="banner">
+                <img src="../../assets/images/charge/banner.jpg" />
+            </div>
+            <P class="title">充值金额</P>
+            <P class="charge-input">￥ <input type="tel" placeholder="请输入充值金额" maxlength="7" /></P>
+            <hr>
+            <P class="title">请选择充值方式</P>
+            <group>
+                <radio title="title" :options="payOptions"></radio>
+            </group>
+            <div class="charge-btn">
+                <button type="button">立即充值</button>
+            </div>
+            <div class="payPics" v-show="false">
+                <img src="../../assets/images/charge/wechat_pay.png" />
+                <img src="../../assets/images/charge/zhifubao_pay.png" />
+                <img src="../../assets/images/charge/bank_pay.png" />
+            </div>
+        </div>
+    </v-content>
+</div>
+</template>
+<script>
+
+    //* 引用工具函数包并以混入的形式加载
+    import util from '../../assets/js/util'
+    //* 引用获取发送数据组件
+    import {
+        getSendData
+    } from '../../assets/js/proto'
+    
+    import $ from 'jquery'
+    import {
+        Group,
+        Cell,
+        Radio
+    } from 'vux'
+    export default {
+        components: {
+            Group,
+            Cell,
+            Radio
+        },
+        data() {
+            return {
+                list: [], //后台API传入的商品数据
+                complete: false, //是否完成请求发送，标志位，防止重复提交
+                isShowTopMenu: false, //* 是否显示顶部导航菜单
+                isShowShareMenu: false, //* 是否显示分享菜单
+                topMenus: {
+                    menu1: '我的信息',
+                    menu2: '投诉商家'
+                }, //* 顶部导航菜单选项
+                shareMenus: {
+                    menu1: '',
+                    menu2: ''
+                }, //* 顶部导航菜单选项
+                payOptions: [{
+                    icon: 'http://dn-placeholder.qbox.me/110x110/FF2D55/000',
+                    key: '001',
+                    value: '微信支付'
+                }, {
+                    icon: 'http://dn-placeholder.qbox.me/110x110/FF2D55/000',
+                    key: '002',
+                    value: '支付宝支付'
+                }, {
+                    icon: 'http://dn-placeholder.qbox.me/110x110/FF2D55/000',
+                    key: '003',
+                    value: '银联支付'
+                }]
+            }
+        },
+        mounted() {
+            //保存微信端发送过来的code
+            this.code = this.$route.query.code;
+            //组件加载时候执行后台商品API，获得商品价格/是否下架等信息
+            this.request();
+            //微信自动登陆，会记录用户的openid
+            this.wxlogin();
+            this.payOptions[0].icon = $('.payPics').find('img')[0].src;
+            this.payOptions[1].icon = $('.payPics').find('img')[1].src;
+            this.payOptions[2].icon = $('.payPics').find('img')[2].src;
+
+        },
+        methods: {
+            /* 跳转至交易详情页 */
+            goDetail() {
+                this.$router.push({
+                    path: '/transaction/detail'
+                })
+            },
+            reloadPage() {
+                console.log('reloadPage')
+                location.reload();
+            },
+            showTopMenu() {
+                this.isShowTopMenu = true;
+            },
+            showShareMenu() {
+                //* 支付宝
+                $('.zhifubao').off('click');
+                $('.zhifubao').on('click', function() {
+                    this.toast('支付宝');
+                })
+                //* 微博
+                $('.weibo').off('click');
+                $('.weibo').on('click', function() {
+                    this.toast('微博');
+                })
+                //* 朋友圈
+                $('.pengyouquan').off('click');
+                $('.pengyouquan').on('click', function() {
+                    this.toast('朋友圈');
+                })
+                //* 微信
+                $('.wechat').off('click');
+                $('.wechat').on('click', function() {
+                    this.toast('微信');
+
+                })
+                //* 刷新
+                $('.reloadPage').off('click');
+                $('.reloadPage').on('click', function() {
+                    location.reload();
+                })
+                //* 复制链接
+                $('.copylink').off('click');
+                $('.copylink').on('click', function() {
+                    this.toast('复制链接');
+                })
+                //* 显示菜单
+                this.isShowShareMenu = true;
+            },
+            topMenuItem(item) {
+                if (item == 'menu1') {
+                    //do something
+                } else if (item == 'menu2') {
+                    //do something
+                } else {
+                    console.warn(item);
+                }
+            },
+            shareMenuItem(item) {
+                if (item == 'menu1') {
+                    //do something
+                } else if (item == 'menu2') {
+                    //do something
+                } else {
+                    console.warn(item);
+                }
+            },
+            wxlogin() {
+                //微信自动登陆，保存code到用户的sessionstorage          
+
+                var search = window.location.search;
+                if (search != undefined && search.length > 1) {
+                    this.code = search.substring(search.indexOf('=') + 1, search.indexOf('&'));
+                    console.log("code:" + this.code);
+                    sessionStorage.setItem('code', this.code);
+                }
+
+                if (!sessionStorage.getItem('member')) {
+
+                    //调用后台API/getcode， 传入微信code，会得到该用户的openid 信息   
+                    util.get('getcode', {
+                        code: this.code
+                    }, (response) => {
+
+                        this.complete = true;
+
+                        if (response.code == "0") {
+
+                            var user = {
+                                openid: "",
+                                phone: "",
+                                token: ""
+                            };
+                            user.phone = response.phone;
+                            user.openid = JSON.parse(response.data).openid;
+                            user.token = JSON.parse(response.data).access_token;
+                            //把用户的openid 信息 存在sessionStorage里
+                            sessionStorage.setItem('member', JSON.stringify(user));
+                            sessionStorage.setItem('openid', user.openid);
+
+                            //调用后台API/updatecode,把用户openid/token 信息保存到后台数据库中 
+
+                            util.post('updatecode', {
+                                openid: user.openid,
+                                token: user.token
+                            }, (response) => {
+                                this.complete = true;
+                            });
+                        } else {
+                            this.complete = true;
+                        }
+                    });
+                } else {
+                    this.complete = true;
+                }
+            },
+
+            //该方法调用后台API/goodsPrice,是用于获取商品价格/是否下架等信息
+            request() {
+                util.get('goodsPrice', {}, (response) => {
+                    console.log(response.code);
+                    console.log(response.list);
+                    console.log(response.list[1].goodsPrice);
+                    if (response.code == "0") {
+                        this.list = response.list;
+                        //如果成功返回，设置商品信息在sessionstorage里
+                        sessionStorage.setItem('goods', JSON.stringify(response.list));
+                        this.price1 = response.list[0].goodsPrice;
+                        this.price2 = response.list[1].goodsPrice;
+                        this.state1 = response.list[0].state;
+                        this.state2 = response.list[1].state;
+                        //  this.state3=response.list[2].state;
+                    } else {}
+                });
+            },
+
+            //该方法是用于提示该功能尚未开放，当商品下架的时候
+            expect() {
+                this.toast('该功能尚未开放，敬请期待');
+            }
+
+        }
+    }
+
+</script>
