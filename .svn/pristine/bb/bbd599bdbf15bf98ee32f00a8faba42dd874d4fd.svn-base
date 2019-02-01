@@ -1,0 +1,709 @@
+<style lang="less" scoped>
+    @import "../../assets/less/config";
+
+    #indexPage .card {
+        background-image: url(../../assets/images/login/card1.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        padding: 10px;
+        color: white;
+        position: relative;
+        /*margin: 30px;*/
+        margin-bottom: 0;
+    }
+
+    @media (max-width:320px) {
+        #indexPage .card {
+            height: 25%;
+        }
+    }
+
+    @media (min-width:321px) and (max-width:375px) {
+        #indexPage .card {
+            height: 26%;
+        }
+    }
+
+    @media (min-width:376px) and (max-width:414px) {
+        #indexPage .card {
+            height: 26.5%;
+        }
+    }
+
+    @media only screen and (width: 375px) and (height: 812px) {
+        #indexPage .card {
+            height: 21%;
+        }
+    }
+
+    #indexPage .card .left {
+        display: inline-block;
+        width: 49%;
+    }
+
+    #indexPage .card .right {
+        display: inline-block;
+        width: 49%;
+        text-align: right;
+        vertical-align: top;
+    }
+
+    #indexPage .card .left .avatar {
+        display: inline-block;
+        width: 30%;
+    }
+
+    #indexPage .card .left .name {
+        display: inline-block;
+        width: 65%;
+        vertical-align: top;
+    }
+
+    #indexPage .card .left .name .type {
+        font-size: 10px;
+    }
+
+    #indexPage .card .left .avatar img {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+    }
+
+    #indexPage .card .card-number {
+        position: absolute;
+        bottom: 18px;
+        left: 13%;
+        color: #ffc056;
+        text-shadow: 1px 1px 1px #000;
+        font-weight: bold;
+    }
+
+    #indexPage .subinfo {
+        padding: 20px 0;
+        text-align: center;
+    }
+
+    #indexPage .subinfo .left {
+        display: inline-block;
+        width: 49%;
+    }
+
+    #indexPage .subinfo .right {
+        display: inline-block;
+        width: 49%;
+    }
+
+    #indexPage .subinfo .label {
+        line-height: 2;
+        font-size: 12px;
+    }
+
+    #indexPage .subinfo .check {
+        line-height: 2;
+        font-size: 14px;
+    }
+
+    #indexPage .subinfo .check a {
+        color: #62a8ea;
+    }
+
+    #indexPage .subinfo .pay {
+        line-height: 3;
+        display: flex;
+        justify-content: space-around;
+    }
+
+    #indexPage .subinfo .pay .pay-btn {
+        padding: 7px 50px;
+        color: #62a8ea;
+        border: 1px solid #62a8ea;
+        border-radius: 5px;
+        background: none;
+    }
+
+    #indexPage .shareMenu {}
+
+    #indexPage .shareMenu .item {
+        display: inline-block;
+        width: 23%;
+    }
+
+    #indexPage .shareMenu .title {
+        font-size: 12px;
+        color: #999;
+    }
+
+    #indexPage .shareMenu .item img {
+        height: 30px;
+        width: auto;
+    }
+
+    #indexPage .rest-money {
+        letter-spacing: 1px;
+    }
+
+    #indexPage .rest-money .title {
+        color: #62a8ea;
+        font-weight: bold;
+    }
+
+    #indexPage .rest-money .money {
+        color: orange;
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+    #indexPage .rest-money .sub-title {
+        color: #62a8ea;
+    }
+
+    #indexPage .marquee-content {
+        /*        text-align: center;*/
+        padding-left: 15px;
+    }
+
+    #indexPage .marquee-content img {
+        width: 18px;
+        vertical-align: text-bottom;
+        margin-right: 5px;
+    }
+
+    #indexPage .new-info {
+        border-width: 0px;
+        position: relative;
+        left: 0px;
+        top: -10px;
+        width: 10px;
+        height: 10px;
+        background: inherit;
+        background-color: #ff5918;
+        border: none;
+        border-radius: 13px;
+        box-shadow: none;
+        font-family: '\5FAE\8F6F\96C5\9ED1';
+        font-weight: 400;
+        font-style: normal;
+        font-size: 12px;
+        color: #FFFFFF;
+        display: inline-block;
+    }
+
+</style>
+<style type="text/css">
+    p {
+        margin: 0px;
+    }
+
+</style>
+<template>
+	<div>
+		<v-header title="">
+<!--
+            <div slot="left" class="item left-item" v-on:click="goLogin">
+        <i class="iconfont icon-fanhui"></i>
+      </div>
+-->
+        </v-header>
+		<v-content id="indexPage">
+            <!--* marquee *-->
+<!--
+            <marquee style="margin: 10px 0;">
+                <marquee-item v-for="i in 2" :key="i">
+                    <div class="marquee-content"><img src="../../assets/images/icon/volume.png" />平台优惠活动：{{indexInfo.activity?indexInfo.activity:'暂无活动'}}</div>
+                </marquee-item>
+            </marquee>
+-->
+                <marquee behavior="scroll" class="marquee-content"><img src="../../assets/images/icon/volume.png" />平台优惠活动：{{indexInfo.activity?indexInfo.activity:'暂无活动'}}</marquee>
+
+             <!--* 公交卡信息 *-->
+			<div class="card">
+				<div class="left">
+                    <!--* 头像、用户名 *-->
+					<!--<div class="avatar"><img src="../../assets/images/index/avatar.png" /></div>
+					<div class="name">{{indexInfo.name}}<br><span class="type">{{indexInfo.cardtype}}</span></div>-->
+				</div>
+				<div class="right">
+                    
+				</div>
+				<div class="card-number">
+					{{indexInfo.cardno?indexInfo.cardno.substring(0,4)+' '+indexInfo.cardno.substring(4,8)+' '+ indexInfo.cardno.substring(8,12)+' '+ indexInfo.cardno.substring(12,13):''}}
+				</div>
+			</div>
+            <!--* 积分、优惠券等 *-->
+			<div class="subinfo">
+                <!--* 余额 *-->
+                <div class="rest-money">
+					<span class="title">余额</span> <span class="money">{{indexInfo.restmoney}}</span><span class="sub-title">元</span></div>
+				<div class="left">
+					<div class="label">积分</div>
+					<div class="check">
+						<a @click="showPoints=true" v-show="!showPoints">查看</a>
+						<span v-show="showPoints">{{indexInfo.points}}</span>
+					</div>
+				</div>
+				<div class="right">
+					<div class="label">优惠券</div>
+					<div class="check">
+						<a @click="showCoupon=true" v-show="!showCoupon">查看</a>
+						<span v-show="showCoupon">{{indexInfo.coupon}}</span>
+					</div>
+				</div>
+				<div class="pay">
+					<button type="button" class="pay-btn" @click="waitNextTime">扫一扫</button>
+					<button type="button" class="pay-btn" @click="goQrcodePage">付款码</button>
+				</div>
+			</div>
+            <!--* 功能菜单条目 *-->
+			<group>
+				<cell title="充值" link="/charge/index/"></cell>
+				<cell title="个人信息" link="/personal/personalcenter/"></cell>
+				<cell title="活动信息" link="/activity/list" @click.native="hasCheckActivity">
+                    <div slot="after-title" class="new-info" v-show="hasNewActivity"></div>
+                </cell>
+				<cell title="会员卡详情" link="/vipCard/detail/"></cell>
+				<cell title="领取实体卡片" link="/index/postCard/"></cell>
+				<!--<cell title="推荐给朋友" is-link @click.native="showShareMenu"></cell>-->
+<!--				<cell title="交易信息" link="/transaction/list/"></cell>-->
+<!--				<cell title="预约信息" is-link></cell>-->
+			</group>
+			<div class="shareMenuBox1" v-show="false">
+				<div class="shareMenu">
+					<div class="item zhifubao">
+						<img src="../../assets/images/index/zhifubao.png" />
+						<div class="title">支付宝</div>
+					</div>
+					<div class="item weibo">
+						<img src="../../assets/images/index/weibo.png" />
+						<div class="title">新浪微博</div>
+					</div>
+					<div class="item pengyouquan">
+						<img src="../../assets/images/index/pengyouquan.png" />
+						<div class="title">朋友圈</div>
+					</div>
+					<div class="item wechat">
+						<img src="../../assets/images/index/wechat.png" />
+						<div class="title">发送朋友</div>
+					</div>
+				</div>
+			</div>
+			<div class="shareMenuBox2" v-show="false">
+				<div class="shareMenu">
+					<div class="item reloadPage">
+						<img src="../../assets/images/index/refresh.png" />
+						<div class="title">刷新</div>
+					</div>
+					<div class="item copylink">
+						<img src="../../assets/images/index/link.png" />
+						<div class="title">复制链接</div>
+					</div>
+				</div>
+			</div>
+			<!--* 分享选项菜单 *-->
+			<actionsheet v-model="isShowShareMenu" :menus="shareMenus" show-cancel></actionsheet>
+		</v-content>
+	</div>
+</template>
+<script>
+    //* 引用工具函数包并以混入的形式加载
+    import util from '../../assets/js/util'
+    //* 引用jQuery库
+    import $ from 'jquery'
+    //* 引用vux组件
+    import {
+        Cell,
+        Group,
+        Actionsheet,
+        Marquee,
+        MarqueeItem
+    } from 'vux'
+
+    import VConsole from 'vconsole/dist/vconsole.min.js';
+
+
+    export default {
+        components: {
+            Cell,
+            Group,
+            Actionsheet,
+        },
+        data() {
+            return {
+                //* 首页信息
+                indexInfo: {
+                    id: '',
+                    name: '',
+                    cardtype: '会员卡',
+                    restmoney: '',
+                    cardno: '',
+                    points: '0',
+                    coupon: '暂无',
+                    activity: '',
+                },
+                //* 查看积分
+                showPoints: false,
+                //* 查看优惠券
+                showCoupon: false,
+                //* 是否显示分享菜单
+                isShowShareMenu: false,
+                //* 分享菜单内容
+                shareMenus: {
+                    menu1: '',
+                    menu2: ''
+                },
+                //* 是否启用加载动画
+                enableLoading: true,
+                //* 加载动画显示状态
+                loading: false,
+                //* 加载动画提示文字
+                loadingMsg: '',
+                //* 商户信息
+                merchant: {
+                    merchantId: '',
+                    merchantName: ''
+                },
+                //* 是否有新活动
+                hasNewActivity: false
+            }
+        },
+        mounted() {
+            window.test = this
+            //* 未连接MQTT时，开始连接MQTT
+            console.log(this.$mqttClient.isConnected())
+            if (!this.$mqttClient.isConnected()) {
+                //* 注册mqtt实例并创建连接
+                this.MqttConnectReady();
+            }
+            //* 查询用户积分
+            this.selectPoint();
+            //* 设定分享菜单
+            //this.shareMenus.menu1 = $('.shareMenuBox1').html();
+            //this.shareMenus.menu2 = $('.shareMenuBox2').html();
+            //* 获取用户选择的卡片模板
+            //this.addCSS('#indexPage .card { background-image: url(./static/img/login/card1.png);}');
+
+            //* 实例化vconsole调试模式
+            //var vConsole = new VConsole();
+            //* 设置当前使用的语言 zh中文、en英文
+            //this.setLanguage('zh')
+
+            /*//let appId = 'wxaa5dc3e2319c1f33';
+            let appId = 'wx58acfec6e83d18cf';
+            let secret = 'b0b9525ef69d4fba05ac1132eb08493e';
+            let code = this.$route.query.code;
+            let local = location.href;
+            if(!code){
+                let reurl = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+appId+'&redirect_uri='+encodeURIComponent(local)+'&response_type=code&scope=snsapi_base&state=1#wechat_redirect';
+                location.href = reurl;
+            alert(reurl);
+            }else{
+                let apiUrl = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid='+appId+'&secret='+secret+'&code='+code+'&grant_type=authorization_code';
+            alert(apiUrl);
+                 location.href = apiUrl
+                 this.post(apiUrl).then((response) => {
+                    alert('访问成功');
+                    alert(response);
+                }).catch((err) => {
+                    alert(err);
+                })
+            }*/
+        },
+        methods: {
+            /**
+             * 功能 确认用户已浏览过最新活动
+             * 参数 无
+             * 返回 无
+             **/
+            hasCheckActivity() {
+                this.$wsCache.set('currentActivityId', this.$wsCache.get('currentActivity').commonActivityId);
+            },
+            /**
+             * 功能 获取当前活动信息（首页小喇叭）
+             * 参数 无
+             * 返回 无
+             **/
+            getCurrentActivity() {
+
+                //* 设定加载提示信息
+                this.loadingMsg = this.CONST.MSG.commonLoading;
+                //* 发送请求
+                this.post(this.CONST.BASE_URL, this.getSendData({
+                    userId: this.$wsCache.get('id') || 'not login',
+                    permissionId: this.$wsCache.get('token') || 'not login',
+                    username: this.$wsCache.get('username') || 'not login',
+                    merchantId: this.merchant.merchantId,
+                    merchantName: this.merchant.merchantName
+                }, this.CONST.APP_ID, this.CONST.METHOD.getCurrentActivity, this.CONST.PWD), this).then((response) => {
+                    console.log('访问成功');
+                    console.log(response);
+                    if (0 == response.subStatus && 0 == response.status) {
+                        let rule = JSON.parse(response.data.commonActivityRule);
+                        let ruleText = '';
+                        for (let i in rule.contents) {
+                            console.log((rule.contents.length - 1) == i)
+                            ruleText += '满' + rule.contents[i].baseMoney + (rule.type === 0 ? '减' : '送') + rule.contents[i].actMoney + ((rule.contents.length - 1) == i ? '。' : '，');
+                        }
+                        this.indexInfo.activity = response.data.commonActivityStartTime.substring(0, 10) + (response.data.commonActivityEndTime.substring(0, 10) > response.data.commonActivityStartTime.substring(0, 10) ? (' - ' + response.data.commonActivityEndTime.substring(0, 10)) : '') + ' 充值' + ruleText;
+                        //sessionStorage.setItem('currentActivity',response.data);
+                        this.$wsCache.set('currentActivity', response.data, {
+                            exp: 3600
+                        });
+                        if (response.data.commonActivityId != this.$wsCache.get('currentActivityId')) {
+                            this.hasNewActivity = true;
+                        }
+                        let testRes = {
+                            "status": "0",
+                            "errorMsg": "",
+                            "subStatus": "0",
+                            "subErrorMsg": "",
+                            "data": {
+                                "commonActivityId": "1f7ff2d4ef1342dba75b11a704ce0bb0",
+                                "commonActivityName": "2019年新年优惠",
+                                "commonActivityDes": "新年礼",
+                                "commonActivityStartTime": "2019-01-27 11:52:54.0",
+                                "commonActivityEndTime": "2019-01-27 11:52:54.0",
+                                "commonActivityRange": 1,
+                                "commonActivityRule": "{\"contents\":[{\"actMoney\":20,\"baseMoney\":100}],\"type\":0}",
+                                "commonActivityScript": "package com.goldpac.ocs.common.memberbusiness.util.activityrule;\nimport com.goldpac.ocs.common.memberbusiness.util.activityrule.ActivityReuslt;\nrule rule00\n  salience 100\n  lock-on-active true\n  when\n   $trade:ActivityReuslt(tradeMoney >= 100)\n  then\n       $trade.setTradeMoney($trade.getTradeMoney());\n       $trade.setPayMoney($trade.getTradeMoney() - 20);\n  end",
+                                "commonActivityUrl": null,
+                                "commonActivityType": 0,
+                                "commonActivityPromotionPlatform": 0,
+                                "commonActivityStatus": 0,
+                                "commonActivityIsDelete": 0,
+                                "commonActivityAdder": "啊实打实的阿萨德按时",
+                                "commonActivityAddTime": 1548589038000,
+                                "commonActivityModifyer": null,
+                                "commonActivityModifyTime": 1548589974000,
+                                "commonActivityChannel": "OCS",
+                                "commonActivityScene": "MemberService",
+                                "commonActivityMerchantId": "9cc807999cc241149c6b0874784f8fd3",
+                                "commonActivityMerchantName": "啊实打实的阿萨德按时",
+                                "commonActivityNotes": null,
+                                "commonActivityReserver1": null,
+                                "commonActivityReserver2": null,
+                                "commonActivityReserver3": null,
+                                "commonActivityReserver4": null
+                            },
+                            "datas": null,
+                            "subOk": true,
+                            "ok": true
+                        }
+                    } else {
+                        if (0 != response.status) {
+                            this.toast(response.errorMsg);
+                            return false;
+                        }
+                        if (0 != response.subStatus) {
+                            if (response.subStatus == '030000000004') {
+                                console.log(response.subErrorMsg);
+                                return false;
+                            }
+                            this.toast(this.CONST.TRANSCODE[response.subStatus]);
+                            this.cleanToken(response.subStatus);
+                            return false;
+                        }
+                    }
+                }).catch((err) => {
+                    console.warn(err);
+                })
+            },
+            /**
+             * 功能 查询卡片信息（卡号、余额等）
+             * 参数 无
+             * 返回 无
+             **/
+            selectCardInfo() {
+                //* 设定加载提示信息
+                this.loadingMsg = this.CONST.MSG.commonLoading;
+                //* 发送请求
+                this.post(this.CONST.BASE_URL, this.getSendData({
+                    userId: this.$wsCache.get('id') || 'not login',
+                    permissionId: this.$wsCache.get('token') || 'not login',
+                    username: this.$wsCache.get('username') || 'not login',
+                    merchantId: this.merchant.merchantId,
+                    merchantName: this.merchant.merchantName
+                }, this.CONST.APP_ID, this.CONST.METHOD.selectCardInfo, this.CONST.PWD), this).then((response) => {
+                    console.log('访问成功');
+                    console.log(response);
+                    if (0 == response.subStatus && 0 == response.status) {
+                        this.indexInfo.cardno = response.data.cardNumber;
+                        this.indexInfo.restmoney = response.data.cardBalance;
+                    } else {
+                        if (0 != response.status) {
+                            this.toast(response.errorMsg);
+                            return false;
+                        }
+                        if (0 != response.subStatus) {
+                            this.toast(this.CONST.TRANSCODE[response.subStatus]);
+                            this.cleanToken(response.subStatus);
+                            return false;
+                        }
+                    }
+                }).catch((err) => {
+                    console.warn(err);
+                })
+            },
+            /**
+             * 功能 查询用户积分信息
+             * 参数 无
+             * 返回 无
+             **/
+            selectPoint() {
+                //* 设定加载提示信息
+                this.loadingMsg = this.CONST.MSG.commonLoading;
+                //* 发送请求
+                this.post(this.CONST.BASE_URL, this.getSendData({
+                    userId: this.$wsCache.get('id') || 'not login',
+                    permissionId: this.$wsCache.get('token') || 'not login',
+                    username: this.$wsCache.get('username') || 'not login',
+                    page: 1,
+                    row: 10
+                }, this.CONST.APP_ID, this.CONST.METHOD.selectPoint, this.CONST.PWD), this).then((response) => {
+                    console.log('访问成功');
+                    console.log(response);
+                    if (0 == response.subStatus && 0 == response.status) {
+                        this.merchant.merchantId = response.data.commonPointInfoMerchantId;
+                        this.merchant.merchantName = response.data.commonPointInfoMerchantName;
+                        sessionStorage.setItem('merchantId', this.merchant.merchantId);
+                        sessionStorage.setItem('merchantName', this.merchant.merchantName);
+                        this.indexInfo.points = response.data.commonPointInfoScore;
+
+                        this.indexInfo.id = response.data.commonPointInfoMerchantId;
+                        this.indexInfo.name = response.data.commonPointInfoMerchantName;
+                        //* 查询会员卡信息
+                        this.selectCardInfo();
+                        //* 获取当前活动信息
+                        this.getCurrentActivity();
+                    } else {
+                        if (0 != response.status) {
+                            this.toast(response.errorMsg);
+                            return false;
+                        }
+                        if (0 != response.subStatus) {
+                            this.toast(this.CONST.TRANSCODE[response.subStatus]);
+                            this.cleanToken(response.subStatus);
+                            return false;
+                        }
+                    }
+                }).catch((err) => {
+                    console.warn(err);
+                })
+
+            },
+            /**
+             * 功能 待开发提示
+             * 参数 无
+             * 返回 无
+             **/
+            waitNextTime() {
+                this.toast('该功能将在以后的版本中上线，敬请期待');
+            },
+            /**
+             * 功能 刷新当前页面
+             * 参数 无
+             * 返回 无
+             **/
+            reloadPage() {
+                console.log('reloadPage')
+                location.reload();
+            },
+            /**
+             * 功能 跳转付款二维码页面
+             * 参数 无
+             * 返回 无
+             **/
+            goQrcodePage() {
+                this.$router.push({
+                    path: this.CONST.ROUTER.qrcodePage
+                })
+            },
+            /**
+             * 功能 跳转个人中心页面（我的）
+             * 参数 无
+             * 返回 无
+             **/
+            goPersonalCenter() {
+                this.$router.push({
+                    path: this.CONST.ROUTER.personalCenterPage
+                })
+            },
+            /**
+             * 功能 跳转登录页面
+             * 参数 无
+             * 返回 无
+             **/
+            goLogin() {
+                this.$router.push({
+                    path: this.CONST.ROUTER.loginPage
+                })
+            },
+            /**
+             * 功能 跳转主页面
+             * 参数 无
+             * 返回 无
+             **/
+            goIndex() {
+                this.$router.push({
+                    path: this.CONST.ROUTER.indexPage
+                })
+            },
+            /**
+             * 功能 显示分享菜单弹窗
+             * 参数 无
+             * 返回 无
+             **/
+            showShareMenu() {
+                var global = this;
+                //* 支付宝
+                $('.zhifubao').off('click');
+                $('.zhifubao').on('click', function() {
+                    global.toast('支付宝');
+                    var url = 'alipays://platformapi/startapp?saId=10000007&clientVersion=3.7.0.0718&qrcode=https://qr.alipay.com/c1x063287crpdxrhcynhd49';
+                    location.href = url;
+                })
+                //* 微博
+                $('.weibo').off('click');
+                $('.weibo').on('click', function() {
+                    global.toast('微博');
+                    var url = "http://service.weibo.com/share/share.php?title=" + encodeURIComponent('一些内容' + '「' + '一个标题' + '」' + ' 点这里' + window.location.href) + '&pic=' + 'http://img.t.sinajs.cn/t4/appstyle/widget/images/library/base/wb_logo.png?id=1395901125982';     
+                    window.open(url); 
+                })
+                //* 朋友圈
+                $('.pengyouquan').off('click');
+                $('.pengyouquan').on('click', function() {
+                    global.toast('朋友圈');
+                })
+                //* 微信
+                $('.wechat').off('click');
+                $('.wechat').on('click', function() {
+                    global.toast('微信');
+
+                })
+                //* 刷新
+                $('.reloadPage').off('click');
+                $('.reloadPage').on('click', function() {
+                    location.reload();
+                })
+                //* 复制链接
+                $('.copylink').off('click');
+                $('.copylink').on('click', function() {
+                    var input = document.createElement('input');
+                    input.setAttribute('readonly', 'readonly');
+                    input.setAttribute('value', location.href);
+                    document.body.appendChild(input);
+                    input.setSelectionRange(0, 9999);
+                    input.select();
+                    if (document.execCommand('copy')) {
+                        document.execCommand('copy');
+                        global.toast('复制成功');
+                    }
+                    document.body.removeChild(input);
+                })
+                //* 显示菜单
+                this.isShowShareMenu = true;
+            },
+        },
+        mixins: [util]
+    }
+
+</script>

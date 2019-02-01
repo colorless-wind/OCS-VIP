@@ -1,0 +1,151 @@
+<style lang="less" scoped>
+    @import "../../assets/less/config";
+
+    #qrcodePage.content {
+        background-color: #439057;
+    }
+
+    #qrcodePage .qr-box {
+        text-align: center;
+        /*        margin: 20% 10%;*/
+        margin: 5%;
+        /*        padding: 10%;*/
+        padding-top: 0;
+        background-color: white;
+    }
+
+    #qrcodePage .qr-box canvas {}
+
+
+    #qrcodePage .qr-box .title {
+        color: #439057;
+        padding: 15px;
+        padding-left: 20px;
+        padding-bottom: 6px;
+        background-color: #fbfbfb;
+        font-size: 14px;
+        text-align: left;
+    }
+
+    #qrcodePage .qr-box .pay-way {
+        padding: 10px 15px;
+        font-size: 15px;
+        text-align: left;
+    }
+
+    #qrcodePage .qr-box .space {
+        background-color: #439057;
+        height: 10px;
+    }
+
+</style>
+<template>
+<div>
+    <v-header title=""></v-header>
+    <v-content id="qrcodePage">
+        <div class="qr-box">
+            <!--* 标题 *-->
+            <div class="title">
+                向商家付款
+            </div>
+            <!--* 二维码 *-->
+            <img id="qrCodeImg" />
+            <hr style="border: none;border-bottom: 1px solid #ddd;">
+            <div class="space"></div>
+            <!--* 付款方式 *-->
+            <div class="pay-way" @click="waitNextTime">会员卡</div>
+<!--
+            <hr style="border: none;border-bottom: 1px solid #ddd;">
+            <div class="pay-way"><i class="iconfont icon-renminbi" aria-hidden="true"></i>账户付款</div>
+            <hr style="border: none;border-bottom: 1px solid #ddd;">
+            <div class="pay-way"><i class="iconfont icon-renminbi" aria-hidden="true"></i>账户付款</div>
+-->
+        </div>
+    </v-content>
+    <!--* 加载动画 load true/false 显示/隐藏；type 1-7 7种样式 *-->
+    <v-loading :type="1" :load="loading" :msg="loadingMsg"></v-loading>
+</div>
+</template>
+<script>
+    //* 引用工具函数包并以混入的形式加载
+    import util from '../../assets/js/util'
+    //* 引用二维码库
+    import QRCode from 'qrcode'
+
+    export default {
+        data() {
+            return {
+                //* 是否启用加载动画
+                enableLoading: true,
+                //* 加载动画显示状态
+                loading: false,
+                //* 加载动画提示文字
+                loadingMsg: '',
+            }
+        },
+        mounted() {
+            //* 获取用户付款二维码
+            this.getUserQrcode();
+            //* 未连接MQTT时，开始连接MQTT
+            if (!this.MQTTConnected) {
+                //* 注册mqtt实例并创建连接
+                this.MqttConnectReady();
+            }
+        },
+        methods: {
+            waitNextTime() {
+                this.toast('该功能将在以后的版本中上线，敬请期待');
+            },
+            /**
+             * 功能 获取需要转换为二维码的信息
+             * 参数 无
+             * 返回 无
+             **/
+            getUserQrcode() {
+                //* 设定加载提示信息
+                this.loadingMsg = this.CONST.MSG.commonLoading;
+                //* 发送请求
+                this.post(this.CONST.BASE_URL, this.getSendData({
+                    memberId: localStorage.getItem('id') || 'not login',
+                    permissionId: localStorage.getItem('token') || 'not login',
+                    username: localStorage.getItem('username') || 'not login',
+                }, this.CONST.APP_ID, this.CONST.METHOD.getUserQrcode, this.CONST.PWD), this).then((response) => {
+                    console.log('访问成功');
+                    console.log(response);
+                    if (0 == response.subStatus && 0 == response.status) {
+                        //* 将返回的信息生成二维码
+                        this.useqrcode(response.data);
+                    } else {
+                        if (0 != response.status) {
+                            this.toast(response.errorMsg);
+                            return false;
+                        }
+                        if (0 != response.subStatus) {
+                            this.toast(this.CONST.TRANSCODE[response.subStatus]);
+                            this.cleanToken(response.subStatus);
+                            return false;
+                        }
+                    }
+                }).catch((err) => {
+                    console.warn(err);
+                })
+            },
+            /**
+             * 功能 动态生成二维码
+             * 参数1 获取需要转换为二维码的信息 类型 String
+             * 返回 无
+             **/
+            useqrcode(qrdata) {
+                qrdata = qrdata || '未能返回有效的二维码信息';
+                QRCode.toDataURL(qrdata).then(url => {
+                        document.getElementById('qrCodeImg').src = url;
+                    })
+                    .catch(err => {
+                        console.error(err)
+                    })
+            }
+        },
+        mixins: [util]
+    }
+
+</script>

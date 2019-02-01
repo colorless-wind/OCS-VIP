@@ -1,0 +1,252 @@
+<style lang="less" scoped>
+    @import "../../assets/less/config";
+
+    #transactionListPage .transaction-list {
+        padding: 5px;
+    }
+
+    #transactionListPage .transaction-list .item {
+        margin: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    #transactionListPage .transaction-list .item .title {
+        padding: 5px;
+        font-size: 17px;
+        width: 45%;
+        display: inline-block;
+    }
+
+    #transactionListPage .transaction-list .item .money {
+        padding: 5px;
+        font-size: 17px;
+        color: #ff6600;
+        width: 45%;
+        display: inline-block;
+        text-align: right;
+    }
+
+    #transactionListPage .transaction-list .item .info {
+        padding: 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        width: 45%;
+        text-overflow: ellipsis;
+        font-size: 14px;
+        color: #999;
+        display: inline-block;
+    }
+
+    #transactionListPage .transaction-list .item .time {
+        padding: 5px;
+        font-size: 14px;
+        color: #999;
+        text-align: right;
+        width: 45%;
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    #transactionListPage .tab-ctrl {
+        width: 90%;
+        margin: 15px auto;
+    }
+
+    #transactionListPage .tab-content {}
+
+</style>
+<style>
+    #transactionListPage .vux-button-group>a.vux-button-tab-item-first:after {
+        border: 1px solid #62a8ea;
+    }
+
+    #transactionListPage .vux-button-group>a.vux-button-group-current {
+        background-color: #62a8ea;
+    }
+
+    #transactionListPage .vux-button-group>a.vux-button-tab-item-last:after {
+        border-right: 1px solid #62a8ea;
+        border-top: 1px solid #62a8ea;
+        border-bottom: 1px solid #62a8ea;
+    }
+
+</style>
+<template>
+<div>
+    <v-header title=""></v-header>
+    <v-content id="transactionListPage">
+        <button-tab class="tab-ctrl" v-model="tabCtrlIndex">
+        <button-tab-item @on-item-click="getConsumeRecords">消费</button-tab-item>
+        <button-tab-item @on-item-click="getRechargeRecords">充值</button-tab-item>
+      </button-tab>
+        <div class="transaction-list">
+             <div class="tab-content" v-show="tabCtrlIndex == 0">
+            <div class="item" @click="goDetail(item,0)" v-for="item in consumeList">
+                <p class="title">会员卡消费</p>
+                <p class="money">-{{(item.commonConsumeRealtotal).toFixed(2)}}</p>
+                <p class="info">消费</p>
+                <p class="time">{{getFormatDate(item.commonConsumeAddtime)}}</p>
+            </div>
+<!--
+            <div class="item" @click="goDetail">
+                <p class="title">会员卡消费</p>
+                <p class="money">-599.00</p>
+                <p class="info">消费</p>
+                <p class="time">2018-10-18 18:33:06</p>
+            </div>
+            <div class="item" @click="goDetail">
+                <p class="title">会员卡消费</p>
+                <p class="money">-120.00</p>
+                <p class="info">消费</p>
+                <p class="time">2018-10-18 19:19:14</p>
+            </div>
+            <div class="item" @click="goDetail">
+                <p class="title">会员卡消费</p>
+                <p class="money">-150.00</p>
+                <p class="info">消费</p>
+                <p class="time">2018-10-19 12:53:55</p>
+            </div>
+-->
+            </div>
+            <div class="tab-content" v-show="tabCtrlIndex == 1">
+            <div class="item" @click="goDetail(item,1)" v-for="(item,index) in chargeList">
+                <p class="title">会员卡充值</p>
+                <p class="money">+{{(item.commonRechargeRealtotal).toFixed(2)}}</p>
+                <p class="info">充值</p>
+                <p class="time">{{getFormatDate(item.commonRechargeAddtime)}}</p>
+            </div>
+            <!--<div class="item" @click="goDetail">
+                <p class="title">会员卡充值</p>
+                <p class="money">+99.00</p>
+                <p class="info">充值</p>
+                <p class="time">2018-10-17 14:53:16</p>
+            </div>
+            <div class="item" @click="goDetail">
+                <p class="title">会员卡充值</p>
+                <p class="money">+20.00</p>
+                <p class="info">充值</p>
+                <p class="time">2018-10-17 15:18:59</p>
+            </div>
+            <div class="item" @click="goDetail">
+                <p class="title">会员卡充值</p>
+                <p class="money">+1050.00</p>
+                <p class="info">充值</p>
+                <p class="time">2018-10-17 18:33:09</p>
+            </div>-->
+            </div>
+           
+        </div>
+    </v-content>
+</div>
+</template>
+<script>
+    //* 引用工具函数包并以混入的形式加载
+    import util from '../../assets/js/util'
+
+    import Vue from 'vue'
+    import VueScroller from 'vue-scroller'
+    Vue.use(VueScroller)
+    import $ from 'jquery'
+    import {
+        Cell,
+        Group,
+        ButtonTab,
+        ButtonTabItem
+    } from 'vux'
+    export default {
+        components: {
+            Cell,
+            Group,
+            ButtonTab,
+            ButtonTabItem
+        },
+        data() {
+            return {
+                list: [], //后台API传入的商品数据
+                tabCtrlIndex: 0, //是否完成请求发送，标志位，防止重复提交
+                chargeList: [],
+                consumeList: [],
+                //* 是否启用加载动画
+                enableLoading: true,
+                //* 加载动画显示状态
+                loading: false,
+                //* 加载动画提示文字
+                loadingMsg: '',
+
+            }
+        },
+        mounted() {
+            this.getConsumeRecords();
+            window.vue = this;
+            //this.tabCtrlIndex = this.
+        },
+        methods: {
+            getRechargeRecords() {
+                //* 设定加载提示信息
+                this.loadingMsg = this.CONST.MSG.commonLoading;
+                //* 发送请求
+                this.post(this.CONST.BASE_URL, this.getSendData({
+                    userId: localStorage.getItem('id') || 'not login',
+                    permissionId: localStorage.getItem('token') || 'not login',
+                    username: localStorage.getItem('username') || 'not login',
+                    merchantId: sessionStorage.getItem('merchantId') || 'no merchantId',
+                    merchantName: sessionStorage.getItem('merchantName') || 'no merchantName'
+                }, this.CONST.APP_ID, this.CONST.METHOD.getRechargeRecords, this.CONST.PWD), this).then((response) => {
+                    console.log('访问成功');
+                    console.log(response);
+                    if (0 == response.subStatus && 0 == response.status) {
+                        this.chargeList = response.datas;
+                    } else {
+                        if (0 != response.status) {
+                            this.toast(response.errorMsg);
+                        }
+                        if (0 != response.subStatus) {
+                            this.toast(this.CONST.TRANSCODE[response.subStatus]);
+                            this.cleanToken(response.subStatus);
+                        }
+                    }
+                }).catch((err) => {
+                    console.warn(err);
+                })
+            },
+            getConsumeRecords() {
+                //* 设定加载提示信息
+                this.loadingMsg = this.CONST.MSG.commonLoading;
+                //* 发送请求
+                this.post(this.CONST.BASE_URL, this.getSendData({
+                    userId: localStorage.getItem('id') || 'not login',
+                    permissionId: localStorage.getItem('token') || 'not login',
+                    username: localStorage.getItem('username') || 'not login',
+                    merchantId: sessionStorage.getItem('merchantId') || 'no merchantId',
+                    merchantName: sessionStorage.getItem('merchantName') || 'no merchantName'
+                }, this.CONST.APP_ID, this.CONST.METHOD.getConsumeRecords, this.CONST.PWD), this).then((response) => {
+                    console.log('访问成功');
+                    console.log(response);
+                    if (0 == response.subStatus && 0 == response.status) {
+                        this.consumeList = response.datas;
+                    } else {
+                        if (0 != response.status) {
+                            this.toast(response.errorMsg);
+                        }
+                        if (0 != response.subStatus) {
+                            this.toast(this.CONST.TRANSCODE[response.subStatus]);
+                            this.cleanToken(response.subStatus);
+                        }
+                    }
+                }).catch((err) => {
+                    console.warn(err);
+                })
+            },
+            /* 跳转至交易详情页 */
+            goDetail(record,type) {
+                record['type'] = type;
+                sessionStorage.setItem('record',JSON.stringify(record));
+                this.$router.push({
+                    path: '/transaction/detail'
+                })
+            },
+        },
+        mixins: [util]
+    }
+
+</script>

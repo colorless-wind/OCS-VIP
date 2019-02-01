@@ -1,0 +1,149 @@
+<style lang="less" scoped>
+    @import "../../assets/less/config";
+
+    #activityListPage .activity-list {}
+
+    #activityListPage .activity-list .item {
+        margin: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    #activityListPage .activity-list .item .title {
+        padding: 5px;
+        font-size: 17px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    #activityListPage .activity-list .item .info {
+        padding: 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        width: 66%;
+        text-overflow: ellipsis;
+        font-size: 14px;
+        color: #999;
+        display: inline-block;
+    }
+
+    #activityListPage .activity-list .item .date {
+        padding: 5px;
+        font-size: 14px;
+        color: #999;
+        text-align: right;
+        width: 26%;
+        display: inline-block;
+        vertical-align: top;
+    }
+
+</style>
+<template>
+<div>
+    <v-header title=""></v-header>
+    <v-content id="activityListPage">
+        <div>
+            <!--* 上拉加载插件vue-scroller *-->
+            <!--* on-infinite为上拉加载事件（页面初始化时也会调用一次），on-refresh为下拉刷新事件 *-->
+            <scroller style="top: 0" :on-refresh="refresh" :on-infinite="infinite" ref="listScroller">
+                <div class="activity-list">
+                    <div class="item" v-for="(item, index) in list" @click="goDetail(item.id)">
+                        <p class="title">{{item.title}}</p>
+                        <p class="info">{{item.content}}</p>
+                        <p class="date">{{item.date}}</p>
+                    </div>
+                </div>
+            </scroller>
+        </div>
+    </v-content>
+</div>
+</template>
+<script>
+    
+    //* 引用工具函数包并以混入的形式加载
+    import util from '../../assets/js/util'
+    
+    import $ from 'jquery'
+    import Vue from 'vue'
+    import VueScroller from 'vue-scroller'
+    Vue.use(VueScroller)
+    export default {
+        components: {},
+        data() {
+            return {
+                //* 列表数据{id: 1, title: '', content: '', date: ''}
+                list: [],
+                //* 当前页码（infinite方法会在页面初始化时自动调用一次currentPage会+1，故此处初始值为0）
+                currentPage: 0,
+                //* 分页大小
+                pageSize: 10,
+                param: {
+                    salerId: '1', //商户的id
+                    sceneId: '会员卡场景', //场景id
+                    //授权，共通必然包括
+                },
+            }
+        },
+        mounted() {
+
+        },
+        methods: {
+            /** 下拉刷新 **/
+            refresh() {
+                setTimeout(() => {
+                    //* 刷新数据当前页码强制为1
+                    this.currentPage = 1;
+
+                    util.post('activity/list', {
+                        currentPage: this.currentPage,
+                        pageSize: this.pageSize
+                    }, (response) => {
+                        console.log(response);
+                        this.list = response.datas;
+                        this.$refs.listScroller.finishPullToRefresh();
+                    });
+
+                }, 1500)
+            },
+            /** 上拉加载 **/
+            infinite(done) {
+                //* 每次调用当前页码+1，页面初始化时会自动调用1次
+                this.currentPage += 1;
+
+                setTimeout(() => {
+                    util.post('activity/list', {
+                        currentPage: this.currentPage,
+                        pageSize: this.pageSize
+                    }, (response) => {
+                        console.log(response);
+                        var datas = response.datas;
+                        //* 追加数据
+                        for (var i = 0; i < datas.length; i++) {
+                            this.list.push(datas[i]);
+                        }
+                        //* 如果没有更多数据时finishInfinite方法追加参数true
+                        if (datas.length > 0) {
+                            this.$refs.listScroller.finishInfinite();
+                        } else {
+                            this.$refs.listScroller.finishInfinite(true);
+                        }
+                    });
+                }, 1500)
+            },
+            goDetail(id) {
+                this.$router.push({
+                    path: '/activity/detail/',
+                    query:{
+                        activityId:id,
+                    }
+                })
+            },
+            //该方法是用于提示该功能尚未开放，当商品下架的时候
+            test() {
+                this.toast('该功能尚未开放，敬请期待');
+            }
+
+        }
+    }
+
+</script>

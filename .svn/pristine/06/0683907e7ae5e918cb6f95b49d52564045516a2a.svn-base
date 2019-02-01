@@ -1,0 +1,364 @@
+<style lang="less" scoped>
+    @import "../../assets/less/config";
+
+    #personalInfoPage.content {
+        /*background-color: #f0eff5;*/
+        background-color: white;
+    }
+
+    @media (max-width:320px) {
+        #personalInfoPage .line {
+            text-align: center;
+            position: relative;
+        }
+    }
+
+    #personalInfoPage .user-info {
+        /*        margin: 5% 0;*/
+        padding-top: 0;
+    }
+
+    #personalInfoPage .user-info .title {
+        color: #ccc;
+        padding: 15px;
+        padding-left: 15px;
+        font-size: 13px;
+        text-align: left;
+    }
+
+    #personalInfoPage .line {
+        padding: 10px 15px;
+        text-align: center;
+        position: relative;
+        background-color: white;
+        /*        padding-left: 15px;*/
+        text-align: left;
+        font-size: 15px;
+    }
+
+    #personalInfoPage .line .left {
+        width: 13%;
+        display: inline-block;
+        color: black;
+    }
+
+    #personalInfoPage .line .right {
+        width: 85%;
+        display: inline-block;
+        color: #777;
+        text-align: right;
+    }
+
+    #personalInfoPage .line .right .name {
+        text-align: right;
+        border: none;
+        padding: 3px;
+        padding-right: 0;
+        color: #999;
+    }
+
+    #personalInfoPage .line-hr {
+        height: 1px;
+        background-color: #eee;
+        /*margin-left: 15px;*/
+    }
+
+</style>
+<style>
+    #personalInfoPage .weui-cells {
+        font-size: 15px;
+    }
+
+    #personalInfoPage .weui-cell:before {
+        height: 0;
+        border-top: 0;
+    }
+
+    #personalInfoPage .weui-cells {
+        margin-top: 0;
+    }
+
+</style>
+<template>
+<div>
+    <v-header title=""></v-header>
+    <v-content id="personalInfoPage">
+        <div class="user-info">
+            <group>
+                <!--* 标题 *-->
+                <div class="title">会员信息</div>
+                <div class="line-hr"></div>
+                <!--* 姓名 *-->
+                <div class="line">
+                    <div class="left">姓名</div>
+                    <div class="right">
+                        <input type="text" v-model="personalData.name.data" placeholder="请输入您的姓名" maxlength="16" class="name" :readonly="!personalData.name.editable" />
+                    </div>
+                </div>
+                <div class="line-hr"></div>
+                <!--* 性别 *-->
+                <div class="line2">
+                    <popup-picker :title="'性别'" :data="sexList" id="sexPicker" v-model="personalData.sex.data" :placeholder="'选择性别'" v-if="personalData.sex.editable"></popup-picker>
+                    <cell title="性别" :value="personalData.sex.data[0]" v-if="!personalData.sex.editable"></cell>
+                </div>
+                <div class="line-hr"></div>
+                <!--* 生日 *-->
+                <div class="line2">
+                    <datetime :title="'生日'" :placeholder="'选择日期'" start-date="1930-01-01" :end-date="today" id="birthdayPicker" v-model="personalData.birthday.data" v-if="personalData.birthday.editable"></datetime>
+                    <cell title="生日" :value="personalData.birthday.data" v-if="!personalData.birthday.editable"></cell>
+                </div>
+                <div class="line-hr"></div>
+                <!--* 手机号 *-->
+                <div class="line">
+                    <div class="left">手机</div>
+                    <div class="right">{{personalData.phone}}</div>
+                </div>
+                <div class="line-hr"></div>
+                <!--* 所在地 *-->
+                <div class="line2">
+                    <x-address id="addressPicker" title="城市" :placeholder="'选择城市'" :list="addressData" v-model="personalData.address.data" :hide-district="true" v-if="personalData.address.editable"></x-address>
+                    <cell title="城市" :value="personalData.address.text" v-if="!personalData.address.editable"></cell>
+                </div>
+                <div class="line-hr"></div>
+            </group>
+
+            <confirm v-model="showConfirm" @on-cancel="onCancel" @on-confirm="onConfirm">
+                <p style="text-align:center;">确认保存改动的信息吗?</p>
+            </confirm>
+        </div>  
+
+    </v-content>
+    <!--* 加载动画 load true/false 显示/隐藏；type 1-7 7种样式 *-->
+    <v-loading :type="1" :load="loading" :msg="loadingMsg"></v-loading>
+</div>
+</template>
+<script>
+    //* 引用工具函数包并以混入的形式加载
+    import util from '../../assets/js/util'
+
+    import $ from 'jquery'
+
+    //* 引用vux组件
+    import {
+        Cell,
+        Group,
+        PopupPicker,
+        Datetime,
+        XAddress,
+        ChinaAddressV4Data,
+        Confirm
+    } from 'vux'
+
+    export default {
+        components: {
+            Cell,
+            Group,
+            PopupPicker,
+            Datetime,
+            XAddress,
+            ChinaAddressV4Data,
+            Confirm
+        },
+        data() {
+            return {
+                editable: false,
+                showConfirm: false,
+                today: true,
+                next: null,
+                personalData: {
+                    name: {
+                        data: '',
+                        editable: false,
+                        value: undefined
+                    },
+                    sex: {
+                        data: [],
+                        editable: false,
+                        value: undefined,
+                    },
+                    birthday: {
+                        data: '',
+                        editable: false,
+                        value: undefined,
+                    },
+                    phone: localStorage.getItem('username'),
+                    address: {
+                        province: undefined,
+                        city: undefined,
+                        data: [],
+                        text: '',
+                        editable: false,
+                        value: undefined,
+                    },
+                },
+                addressData: ChinaAddressV4Data,
+                sexList: [
+                    ['男', '女']
+                ],
+                //* 是否启用加载动画
+                enableLoading: true,
+                //* 加载动画显示状态
+                loading: false,
+                //* 加载动画提示文字
+                loadingMsg: '',
+            }
+        },
+        mounted() {
+            window.$ = $;
+            window.vue = this;
+            this.personalData.name.editable = localStorage.getItem('personDataReadonlyName') ? false : true;
+            this.personalData.sex.editable = localStorage.getItem('personDataReadonlySex') ? false : true;
+            this.personalData.birthday.editable = localStorage.getItem('personDataReadonlyBirthDay') ? false : true;
+            this.personalData.address.editable = localStorage.getItem('personDataReadonlyAddress') ? false : true;
+            this.today = this.getFormatDate(new Date().getTime()).substring(0, 10);
+            console.log(this.today);
+            if (this.personalData.name.editable && this.personalData.sex.editable && this.personalData.birthday.editable && this.personalData.address.editable) {
+                //this.selectUserDetail();
+            } else {
+                this.selectUserDetail();
+            }
+            this.$router.beforeEach((to, from, next) => {
+                if (from.path == "/personal/personalinfo/") {
+                    this.next = next;
+                    this.checkInfo();
+                    //1. next()  进行管道中的下一个钩子。如果全部钩子执行完了，则导航的状态就是confirm的
+                    //2. next('/') 或者next({path:'/'}) 跳转到一个不同的地址，当前的好行中断，然后进行一个新的导航
+                    //3. next(false) 中断当前的导航
+                } else {
+                    next() //必须加
+                }
+            })
+
+        },
+        methods: {
+            checkInfo() {
+                if (this.personalData.name.editable && this.personalData.name.data) {
+                    this.personalData.name.value = this.personalData.name.data;
+                }
+                if (this.personalData.sex.editable && this.personalData.sex.data[0]) {
+                    this.personalData.sex.value = this.personalData.sex.data[0] == '男' ? 1 : 0;
+                }
+                if (this.personalData.birthday.editable && this.personalData.birthday.data) {
+                    this.personalData.birthday.value = new Date(this.personalData.birthday.data).getTime();
+
+                }
+                if (this.personalData.address.editable && this.personalData.address.data[0]) {
+                    this.personalData.address.province = $('#addressPicker').text().trim().split('城市    ')[1].split(' ')[0];
+                    this.personalData.address.city = $('#addressPicker').text().trim().split('城市    ')[1].split(' ')[1] == "市辖区" ? this.personalData.address.province : $('#addressPicker').text().trim().split('城市    ')[1].split(' ')[1];
+                    this.personalData.address.value = this.personalData.address.province + ' ' + this.personalData.address.city;
+                }
+                if (this.personalData.name.value !== undefined || this.personalData.sex.value !== undefined || this.personalData.birthday.value !== undefined || this.personalData.address.value !== undefined) {
+                    this.next(false);
+                    this.showConfirm = true;
+                } else {
+                    this.next();
+                }
+                console.log(this.personalData)
+            },
+            onCancel() {},
+            onConfirm(a) {
+                console.log(a);
+                console.log(this.personalData);
+                this.testUpdateUserDetail();
+                this.next();
+            },
+            testUpdateUserDetail() {
+                var testparam = {
+                    "scene": "MemberService",
+                    "channel": "OCS",
+                    "merchantId": "8374f2833044427a8d96afa5779c904c",
+                    "merchantName": "测试账户002",
+                    "userid": "b22c848a928b40eb83fd7b75076a6ab0",
+                    "permissionId": "1e62096e84144829ac8700ceafa4ad98",
+
+                    "username": "1234567890000111111",
+                    "country": "中国",
+                    "alias": "小拉拉",
+                    "Sex": 0,
+                    "city": "北京",
+                    //"uuid": "b22c848a928b40eb83fd7b75076a6ab0",
+                    "province": "北京",
+                }
+                //* 设定加载提示信息
+                this.loadingMsg = this.CONST.MSG.commonLoading;
+                //* 发送请求
+                this.post(this.CONST.BASE_URL, this.getSendData({
+                    userid: localStorage.getItem('id') || 'not login',
+                    permissionId: localStorage.getItem('token') || 'not login',
+                    username: localStorage.getItem('username') || 'not login',
+                    country: '中国',
+                    province: this.personalData.address.province,
+                    city: this.personalData.address.city,
+                    alias: this.personalData.name.value,
+                    birthday: this.personalData.birthday.value,
+                    sex: this.personalData.sex.value,
+                }, this.CONST.APP_ID, this.CONST.METHOD.updateUserDetail, this.CONST.PWD)).then((response) => {
+                    console.log('访问成功');
+                    console.log(response);
+                    if (0 == response.subStatus && 0 == response.status) {
+                        if (this.personalData.name.value !== undefined) {
+                            localStorage.setItem('personDataReadonlyName', true);
+                        }
+                        if (this.personalData.sex.value !== undefined) {
+                            localStorage.setItem('personDataReadonlySex', true);
+                        }
+                        if (this.personalData.birthday.value !== undefined) {
+                            localStorage.setItem('personDataReadonlyBirthDay', true);
+                        }
+                        if (this.personalData.address.value !== undefined) {
+                            localStorage.setItem('personDataReadonlyAddress', true);
+                        }
+                    } else {
+                        if (0 != response.status) {
+                            this.toast(response.errorMsg);
+                        }
+                        if (0 != response.subStatus) {
+                            this.toast(response.subErrorMsg);
+                        }
+                    }
+                }).catch((err) => {
+                    console.warn(err);
+                })
+            },
+            onShow() {},
+            onHide() {},
+            onChange() {},
+            selectUserDetail() {
+                //* 设定加载提示信息
+                this.loadingMsg = this.CONST.MSG.commonLoading;
+                //* 发送请求
+                this.post(this.CONST.BASE_URL, this.getSendData({
+                    userId: localStorage.getItem('id') || 'not login',
+                    permissionId: localStorage.getItem('token') || 'not login',
+                    username: localStorage.getItem('username') || 'not login',
+                    merchantId: sessionStorage.getItem('merchantId') || 'no merchantId',
+                    merchantName: sessionStorage.getItem('merchantName') || 'no merchantName'
+                }, this.CONST.APP_ID, this.CONST.METHOD.selectUserDetail, this.CONST.PWD), this).then((response) => {
+                    console.log('访问成功');
+                    console.log(response);
+                    if (0 == response.subStatus && 0 == response.status) {
+                        var data = response.data;
+                        this.personalData.name.data = data.alias;
+                        this.personalData.sex.data = data.sex == 0 ? ['女'] : ['男'];
+                        this.personalData.birthday.data = this.getFormatDate(data.birthday).substring(0, 10);
+                        this.personalData.phone = data.username;
+                        this.personalData.address.text = data.province + ' ' + data.city;
+                    } else {
+                        if (0 != response.status) {
+                            this.toast(response.errorMsg);
+                        }
+                        if (0 != response.subStatus) {
+                            this.toast(response.subErrorMsg);
+                        }
+                    }
+                }).catch((err) => {
+                    console.warn(err);
+                })
+
+            },
+        },
+        beforeDestroy: function() {},
+        mixins: [util]
+    }
+
+</script>

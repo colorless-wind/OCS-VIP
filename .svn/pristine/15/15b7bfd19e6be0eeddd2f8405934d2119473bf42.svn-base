@@ -1,0 +1,212 @@
+<style lang="less" scoped>
+    @import "../../assets/less/config";
+
+    #changePwdPage .form {
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    #changePwdPage .line {
+        padding: 10px 0;
+        text-align: center;
+        position: relative;
+    }
+
+    #changePwdPage .icon {
+        width: 20px;
+        position: absolute;
+        top: 18px;
+        left: 10px;
+    }
+    
+    #changePwdPage .text {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 5px 5px 5px 45px;
+        line-height: 28px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+        background-color: aliceblue;
+    }
+
+    @media (max-width:320px) {
+        #changePwdPage .line {
+            padding: 10px 0;
+            text-align: center;
+            position: relative;
+        }
+        #changePwdPage .icon {
+            width: 20px;
+            position: absolute;
+            top: 18px;
+            left: 10px;
+        }
+
+        #changePwdPage .text {
+            font-size: 12px;
+        }
+    }
+
+    #changePwdPage .btn {
+        width: 50%;
+        line-height: 38px;
+        border-radius: 5px;
+        /*border: 1px solid darken(@main, 3%);*/
+        border: none;
+        font-size: 14px;
+        color: #fff;
+        background-color: #62a8ea;
+    }
+
+    #changePwdPage .banner {
+        width: 100%;
+        margin-bottom: 30px;
+    }
+
+    #changePwdPage .go-login {
+        float: left;
+        padding-left: 20px;
+        color: #999;
+    }
+
+    #changePwdPage .verify-input {
+        width: 50%;
+    }
+
+    #changePwdPage .verify-btn {
+        width: 45%;
+        /*background-color: lightgray;*/
+        background-color: lightcoral;
+        margin-left: 3%;
+    }
+
+</style>
+<template>
+	<div>
+		<v-header title=""></v-header>
+		<v-content id="changePwdPage">
+            <div>
+            <!--* banner *-->
+			<img src="../../assets/images/login/banner.jpg" class="banner" />
+			<form class="form" @submit.prevent="submit">
+                <!--* 原始密码 *-->
+                <div class="line">
+					<img src="../../assets/images/login/password.png" class="icon" />
+					<input class="text" type="password" :placeholder="CONST.PLACEHOLDER.oldPwd" maxlength="11" v-model="form.oldPassword">
+				</div>
+                <!--* 新密码 *-->
+                <div class="line">
+					<img src="../../assets/images/login/password.png" class="icon" />
+					<input class="text" type="password" :placeholder="CONST.PLACEHOLDER.newPwd" maxlength="11" v-model="form.newPassword">
+				</div>
+                <!--* 确认新密码 *-->
+				<div class="line">
+					<img src="../../assets/images/login/password.png" class="icon" />
+					<input class="text" type="password" :placeholder="CONST.PLACEHOLDER.newPwdConfirm" maxlength="11" v-model="form.confirmPassword">
+				</div>
+                <!--* 提交按钮 *-->
+				<div class="line">
+					<button class="btn" type="button" @click="checkFormInfo">提交</button>
+				</div>
+			</form>
+                </div>
+		</v-content>
+        <!--* 加载动画 load true/false 显示/隐藏；type 1-7 7种样式 *-->
+        <v-loading :type="1" :load="loading" :msg="loadingMsg"></v-loading>
+	</div>
+</template>
+<script>
+    //* 引用工具函数包并以混入的形式加载
+    import util from '../../assets/js/util'
+
+    export default {
+        data() {
+            return {
+                //* 提交表单信息
+                form: {
+                    oldPassword: '',
+                    newPassword: '',
+                    confirmPassword: '',
+                },
+                //* 验证码计时
+                vTimer: 60,
+                //* 是否启用加载动画
+                enableLoading: true,
+                //* 加载动画显示状态
+                loading: false,
+                //* 加载动画提示文字
+                loadingMsg: '',
+            }
+        },
+        methods: {
+            /**
+             * 功能 修改密码
+             * 参数 无
+             * 返回 无
+             **/
+            changePassword() {
+                //* 设定加载提示信息
+                this.loadingMsg = this.CONST.MSG.resetPwdStep2Loading;
+                //* 发送请求
+                this.post(this.CONST.BASE_URL, this.getSendData({
+                    userId: localStorage.getItem('id') || 'not login',
+                    permissionId: localStorage.getItem('token') || 'not login',
+                    username: localStorage.getItem('username') || 'not login',
+                    oldPwd: this.$md5(this.form.oldPassword),
+                    password: this.$md5(this.form.newPassword),
+                }, this.CONST.APP_ID, this.CONST.METHOD.changePwd, this.CONST.PWD), this).then((response) => {
+                    console.log('访问成功');
+                    console.log(response);
+                    if (0 == response.subStatus && 0 == response.status) {
+                        this.toast(this.CONST.MSG.changePwdSuccess);
+                        //* 跳转至登录页面
+                        this.$router.push({
+                            path: this.CONST.ROUTER.loginPage
+                        })
+                    } else {
+                        if (0 != response.status) {
+                            this.toast(response.errorMsg);
+                        }
+                        if (0 != response.subStatus) {
+                            this.toast(response.subErrorMsg);
+                        }
+                    }
+                }).catch((err) => {
+                    console.warn(err);
+                })
+            },
+            /**
+             * 功能 校验用户信息
+             * 参数 无
+             * 返回 无
+             **/
+            checkFormInfo() {
+                //* 校验原始密码
+                if (!this.CONST.REGEX.pwd.test(this.form.oldPassword)) {
+                    this.toast(this.CONST.MSG.oldPwdCheck);
+                    return false;
+                }
+                //* 校验新密码
+                if (!this.CONST.REGEX.pwd.test(this.form.newPassword)) {
+                    this.toast(this.CONST.MSG.pwdCheck);
+                    return false;
+                }
+                //* 校验确认新密码
+                if (!this.CONST.REGEX.pwd.test(this.form.confirmPassword)) {
+                    this.toast(this.CONST.MSG.pwdConfirmCheck);
+                    return false;
+                }
+                //* 校验新密码与确认新密码是否一致
+                if (this.form.confirmPassword !== this.form.newPassword) {
+                    this.toast(this.CONST.MSG.pwdConfirmSameCheck);
+                    return false;
+                }
+                //* 发送重置密码请求
+                this.changePassword();
+            },
+        },
+        mixins: [util]
+    }
+
+</script>

@@ -1,0 +1,211 @@
+<style lang="less" scoped>
+    @import "../../assets/less/config";
+
+    #transactionDetailPage .transaction-detail {}
+
+    #transactionDetailPage .transaction-detail .form {
+        margin: 10px;
+    }
+
+    #transactionDetailPage .transaction-detail .form .title {
+        padding: 5px;
+        font-size: 18px;
+        text-align: center;
+    }
+
+    #transactionDetailPage .transaction-detail .form .money {
+        color: #ff6600;
+        padding: 5px;
+        font-size: 28px;
+        text-align: center;
+    }
+
+    #transactionDetailPage .transaction-detail .form .status {
+        color: #999;
+        padding: 5px;
+        font-size: 14px;
+        text-align: center;
+        margin-bottom: 10%;
+    }
+
+    #transactionDetailPage .transaction-detail .form .item {
+        padding: 2px 15px;
+    }
+
+    #transactionDetailPage .transaction-detail .form hr {
+        margin: 10px 20px;
+    }
+
+    #transactionDetailPage .transaction-detail .form .item .description-label {
+        padding: 5px;
+        width: 45%;
+        font-size: 14px;
+        color: #999;
+        display: inline-block;
+    }
+
+    #transactionDetailPage .transaction-detail .form .item .description-value {
+        padding: 5px;
+        width: 45%;
+        font-size: 14px;
+        display: inline-block;
+        text-align: right;
+    }
+
+    #transactionDetailPage .transaction-detail .form .item .type-label {
+        padding: 5px;
+        width: 45%;
+        font-size: 14px;
+        color: #999;
+        display: inline-block;
+    }
+
+    #transactionDetailPage .transaction-detail .form .item .type-value {
+        padding: 5px;
+        width: 45%;
+        font-size: 14px;
+        display: inline-block;
+        text-align: right;
+    }
+
+    #transactionDetailPage .transaction-detail .form .item .saler-name-label {
+        padding: 5px;
+        width: 45%;
+        font-size: 14px;
+        color: #999;
+        display: inline-block;
+    }
+
+    #transactionDetailPage .transaction-detail .form .item .saler-name-value {
+        padding: 5px;
+        width: 45%;
+        font-size: 14px;
+        display: inline-block;
+        text-align: right;
+    }
+
+    #transactionDetailPage .transaction-detail .form .item .order-number-label {
+        padding: 5px;
+        width: 22%;
+        font-size: 14px;
+        color: #999;
+        display: inline-block;
+    }
+
+    #transactionDetailPage .transaction-detail .form .item .order-number-value {
+        padding: 5px;
+        width: 68%;
+        font-size: 14px;
+        display: inline-block;
+        text-align: right;
+    }
+
+    #transactionDetailPage .transaction-detail .form .item .order-time-label {
+        padding: 5px;
+        width: 22%;
+        font-size: 14px;
+        color: #999;
+        display: inline-block;
+    }
+
+    #transactionDetailPage .transaction-detail .form .item .order-time-value {
+        padding: 5px;
+        width: 68%;
+        font-size: 14px;
+        display: inline-block;
+        text-align: right;
+    }
+
+</style>
+<template>
+<div>
+    <v-header title=""></v-header>
+    <v-content id="transactionDetailPage">
+        <div class="transaction-detail">
+            <div class="form">
+                <p class="title">会员卡支付</p>
+                <p class="money">{{info.money}}</p>
+                <p class="status">{{info.status}}</p>
+                <div class="item">
+                    <p class="description-label">交易方式</p>
+                    <p class="description-value">{{info.way}}</p>
+                </div>
+                <div class="item">
+                    <p class="type-label">交易分类</p>
+                    <p class="type-value">{{info.type}}</p>
+                </div>
+                <div class="item">
+                    <p class="saler-name-label">商户名称</p>
+                    <p class="saler-name-value">{{info.salerName}}</p>
+                </div>
+                <hr>
+                <div class="item">
+                    <p class="order-number-label">订单号</p>
+                    <p class="order-number-value">{{info.orderNo}}</p>
+                </div>
+                <div class="item">
+                    <p class="order-time-label">下单时间</p>
+                    <p class="order-time-value">{{info.orderTime}}</p>
+                </div>
+            </div>
+        </div>
+    </v-content>
+</div>
+</template>
+<script>
+    //* 引用工具函数包并以混入的形式加载
+    import util from '../../assets/js/util'
+
+    export default {
+        components: {},
+        data() {
+            return {
+                //* 详情信息
+                info: {
+                    money: '',
+                    status: '',
+                    way: '',
+                    type: '',
+                    salerName: '',
+                    orderNo: '',
+                    orderTime: '',
+                }
+            }
+        },
+        mounted() {
+            //* 获取详情数据
+            let record = JSON.parse(sessionStorage.getItem('record'));
+            if (record) {
+                if (record.type === 1) {
+                    this.info.money = record.commonRechargeRealtotal.toFixed(2);
+                    this.info.type = '充值';
+                    this.info.salerName = record.commonRechargeMerchantName;
+                    this.info.orderNo = record.commonRechargeOrderno;
+                    this.info.orderTime = this.getFormatDate(record.commonRechargeAddtime);
+                    this.info.status = '交易成功';
+                    this.info.way = '会员卡支付';
+                } else {
+                    this.info.money = record.commonConsumeRealtotal.toFixed(2);
+                    this.info.type = '消费';
+                    this.info.salerName = record.commonConsumeMerchantName;
+                    this.info.orderNo = record.commonConsumeOrderno;
+                    this.info.orderTime = this.getFormatDate(record.commonConsumeAddtime);
+                    this.info.status = '交易成功';
+                    this.info.way = '会员卡支付';
+                }
+            } else {
+                this.toast('暂无数据，请稍后查询');
+            }
+        },
+        methods: {
+            test() {
+                this.$router.push({
+                    path: '/transaction/detail'
+                })
+            },
+
+        },
+        mixins: [util]
+    }
+
+</script>

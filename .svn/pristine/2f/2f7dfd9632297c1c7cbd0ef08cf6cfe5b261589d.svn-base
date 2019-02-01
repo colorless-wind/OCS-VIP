@@ -1,0 +1,360 @@
+<style>
+    @import "../../assets/css/activity.css";
+</style>
+<style lang="less" scoped>
+    @import "../../assets/less/config";
+
+    #activityDetailPage.content {
+        background-color: #89bceb;
+        background-image: url(../../assets/images/activity/bg.png);
+        padding: 0;
+    }
+
+    #activityDetailPage .activity-detail {
+        color: white;
+        font-size: 14px;
+    }
+
+    #activityDetailPage .activity-detail h2 {
+        padding: 15px 25px 0 25px;
+        line-height: 1.4;
+        font-size: 28px;
+        color: white;
+    }
+
+    #activityDetailPage .activity-detail hr {
+        border: none;
+        border-bottom: 1px solid #ccc;
+        margin: 0 10px 15px 10px;
+    }
+
+    #activityDetailPage .activity-detail .date {
+        font-size: 12px;
+        /*color: #bbb;*/
+        color: white;
+        padding: 10px 25px;
+    }
+
+    #activityDetailPage .activity-detail .info {
+        padding: 10px 25px;
+    }
+
+    #activityDetailPage .activity-detail .info .title {
+        font-weight: bold;
+    }
+
+    #activityDetailPage .activity-detail .info .message {
+        font-size: 18px;
+        text-align: justify;
+        line-height: 1.5;
+        padding: 10px;
+        border: 1px solid;
+        font-weight: bold;
+    }
+
+    #activityDetailPage .activity-detail .info .message ul {
+        padding-left: 30px;
+        /*margin: 5px 0;*/
+    }
+
+    #activityDetailPage .activity-detail .info .description {
+        font-size: 12px;
+        text-align: justify;
+        line-height: 1.5;
+        padding: 10px;
+        border: 1px solid;
+    }
+
+    #activityDetailPage .activity-detail .info .pictures {}
+
+    #activityDetailPage .activity-detail .top-box {
+        margin: 50px;
+        text-align: center;
+    }
+
+    #activityDetailPage .share-btn {
+        border-width: 0px;
+        position: absolute;
+        left: 15px;
+        bottom: 50px;
+        width: 132px;
+        background: inherit;
+        background-color: rgba(255, 102, 0, 1);
+        border: none;
+        border-radius: 5px;
+        -moz-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.349019607843137);
+        -webkit-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.349019607843137);
+        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.349019607843137);
+        margin: 20% auto;
+        text-align: center;
+        line-height: 38px;
+        color: white;
+        opacity: 1;
+        transform: none;
+        animation: fadeIn 2s ease 4s 1 both;
+    }
+
+    @font-face {
+        font-family: 'huakangwawa';
+        src: url('../../assets/iconfont/huakangwawa.ttf');
+    }
+
+</style>
+<template>
+<div>
+    <v-header title=""></v-header>
+    <v-content id="activityDetailPage">
+        <!--<div class="activity-detail">
+            <div class="top-box">
+            <h2>{{data.title}}</h2>
+            <div class="date">活动有效期：{{data.date}}</div>
+            </div>
+            <div class="info">
+                <p class="title">活动规则</p>
+                <div class="message">
+                <ul>
+                    <li v-for="item in data.content">{{item}}</li>
+                </ul>
+                </div>
+                <br>
+                <p class="title">活动说明</p>
+                <p class="description">
+                    {{data.description}}
+                </p>
+                <p class="pictures"></p>
+                <div class="share-btn">分享</div>
+            </div>
+        </div>-->
+        <div id="warp">
+        <div id="content">
+            <div class="p-index main phoneBox" id="con" style="width: 100%; height: 100%; margin-left: 0px;">
+                <div class="nr" id="nr" style="width: 100%; height: 100%; overflow: hidden; transform-origin: left top 0px; transform: scale(1);">
+                    <section class="main-page z-current" style="transition: none;">
+                        <div class="m-img" id="page1">
+                            <div class="edit_wrapper" data-scene-id="69840">
+                                <div id="wrapper-background681987" style="width: 100%; height: 100%; background-size: cover; background-position: 50% 50%;"></div>
+                                <ul eqx-edit-destroy="" id="edit_area681987" paste-element="" class="edit_area weebly-content-area weebly-area-active" style="margin-top: 0px;width: 100%; height: 100%;">
+                                    <!--* cloud back *-->
+                                    <li comp-drag="" comp-rotate="" class="comp-resize comp-rotate inside wsite-image" id="inside_4047927837" num="1" ctype="4" comp-resize="" data-event="1120601" style="width: 442px; height: 112px; left: 0; bottom: 0; z-index: 1; transform: rotateZ(0deg);">
+                                        <div class="element-box" element-anim="" style="top: 393px; left: -78px; width: 100%; height: 100%; z-index: 1; color: rgb(103, 103, 103); opacity: 1; transform: none; text-align: left; border-width: 0px; border-style: solid; border-color: rgb(0, 0, 0); border-radius: 0px; padding-bottom: 0px; padding-top: 0px; box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 0px; animation: fadeInUp 1s ease 0s 1 both;">
+                                            <div class="element-box-contents" style="width: 100%; height: 100%;"><img id="4047927837" ctype="4" class="element comp_image editable-image" src="../../assets/images/activity/cloud_back.png" style="width: 442.381px; height: 112px; margin-left: -0.190635px; margin-top: 0px;"></div>
+                                        </div>
+                                    </li>
+                                    <!--* boom *-->
+                                    <li comp-drag="" comp-rotate="" class="comp-resize comp-rotate inside wsite-image" id="inside_4973446940" num="2" ctype="4" comp-resize="" data-event="1120601" style="width: 100%; height: 243.465px; left: 0; top: -35px; z-index: 2; transform: rotateZ(0deg);">
+                                        <div class="element-box" element-anim="" style="top: -35px; left: -45px; width: 100%; height: 100%; z-index: 2; color: rgb(103, 103, 103); opacity: 1; transform: none; text-align: left; border-width: 0px; border-style: solid; border-color: rgb(0, 0, 0); border-radius: 0px; padding-bottom: 0px; padding-top: 0px; box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 0px; line-height: 1; animation: bounceInDown 1s ease 0.5s 1 both;">
+                                            <div class="element-box-contents" style="width: 100%; height: 100%;"><img id="4973446940" ctype="4" class="element comp_image editable-image" src="../../assets/images/activity/boom.png" style="width: 100%; height: 243.465px; margin-left: 2.84217e-14px; margin-top: 0px;"></div>
+                                        </div>
+                                    </li>
+                                    <!--* word art *-->
+                                    <li comp-drag="" comp-rotate="" class="comp-resize comp-rotate inside wsite-image" id="inside_181515847" num="3" ctype="4" comp-resize="" data-event="1120601" style="width: 235px; height: 140px; left: 69px; top: 43px; z-index: 3; transform: rotateZ(0deg);">
+                                        <div class="element-box" element-anim="" style="top: 80px; left: 46px; width: 100%; height: 100%; z-index: 3; color: rgb(103, 103, 103); opacity: 1; transform: none; text-align: left; border-width: 0px; border-style: solid; border-color: rgb(0, 0, 0); border-radius: 0px; padding-bottom: 0px; padding-top: 0px; box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 0px; animation: bounceInUp 1s ease 0.7s 1 both;">
+                                            <div class="element-box-contents" style="width: 100%;height: 100%;font-size: 37px;text-align: center;padding-top: 9%;color: #e60037;text-shadow: 3px 3px 2px #851823 !important;font-family: huakangwawa;font-weight: bold;">
+                                                <!--<img id="181515847" ctype="4" class="element comp_image editable-image" src="../../assets/images/activity/word_art.png" style="width: 235.564px; height: 140px; margin-left: -0.281927px; margin-top: 0px;">-->
+                                                {{data.commonActivityName}}
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!--* dog *-->
+                                    <li comp-drag="" comp-rotate="" class="comp-resize comp-rotate inside wsite-image" id="inside_5696513339" num="4" ctype="4" comp-resize="" data-event="1120601" style="width: 67px;height: 47px;left: 157px;top: 25px;z-index: 5;transform: rotateZ(0deg);">
+                                        <div class="element-box" element-anim="" style="top: 62px; left: 127px; width: 100%; height: 100%; z-index: 5; color: rgb(103, 103, 103); opacity: 1; transform: none; text-align: left; border-width: 0px; border-style: solid; border-color: rgb(0, 0, 0); border-radius: 0px; padding-bottom: 0px; padding-top: 0px; box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 0px; animation: bounceIn 1s ease 1.7s 1 both;">
+                                            <div class="element-box-contents" style="width: 100%; height: 100%;"><img id="5696513339" ctype="4" class="element comp_image editable-image" src="../../assets/images/activity/dog.png" style="width: 67px; height: 47.1524px; margin-top: -0.0761986px; margin-left: 0px;"></div>
+                                        </div>
+                                    </li>
+                                    <!--* cloud front *-->
+                                    <li comp-drag="" comp-rotate="" class="comp-resize comp-rotate inside wsite-image" id="inside_9027688983" num="5" ctype="4" comp-resize="" data-event="1120601" style="width: 448px; height: 98px; left: 0; bottom: 0; z-index: 6; transform: rotateZ(0deg);">
+                                        <div class="element-box" element-anim="" style="top: 407px; left: -100px; width: 100%; height: 100%; z-index: 6; color: rgb(103, 103, 103); opacity: 1; transform: none; text-align: left; border-width: 0px; border-style: solid; border-color: rgb(0, 0, 0); border-radius: 0px; padding-bottom: 0px; padding-top: 0px; box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 0px; animation: fadeInUp 1s ease 0.2s 1 both;">
+                                            <div class="element-box-contents" style="width: 100%; height: 100%;"><img id="9027688983" ctype="4" class="element comp_image editable-image" src="../../assets/images/activity/cloud_front.png" style="width: 448.018px; height: 98px; margin-left: -0.00903226px; margin-top: 0px;"></div>
+                                        </div>
+                                    </li>
+                                    <!--* present single *-->
+                                    <li comp-drag="" comp-rotate="" class="comp-resize comp-rotate inside wsite-image" id="inside_6407319877" num="6" ctype="4" comp-resize="" data-event="1120601" style="width: 108px; height: 81px; left: 146px; bottom: 15px; z-index: 7; transform: rotateZ(0deg);">
+                                        <div class="element-box" element-anim="" style="top: 399px; left: 146px; width: 100%; height: 100%; z-index: 7; color: rgb(103, 103, 103); opacity: 1; transform: none; text-align: left; border-width: 0px; border-style: solid; border-color: rgb(0, 0, 0); border-radius: 0px; padding-bottom: 0px; padding-top: 0px; box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 0px; animation: bounceInUp 1s ease 1s 1 both;">
+                                            <div class="element-box-contents" style="width: 100%; height: 100%;"><img id="6407319877" ctype="4" class="element comp_image editable-image" src="../../assets/images/activity/present_single.png" style="width: 108.21px; height: 81px; margin-left: -0.105117px; margin-top: 0px;"></div>
+                                        </div>
+                                    </li>
+                                    <!--* present double *-->
+                                    <li comp-drag="" comp-rotate="" class="comp-resize comp-rotate inside wsite-image" id="inside_2576743406" num="7" ctype="4" comp-resize="" data-event="1120601" style="width: 164px; height: 80px; left: 179px; bottom: 15px; z-index: 8; transform: rotateZ(0deg);">
+                                        <div class="element-box" element-anim="" style="top: 399px; left: 179px; width: 100%; height: 100%; z-index: 8; color: rgb(103, 103, 103); opacity: 1; transform: none; text-align: left; border-width: 0px; border-style: solid; border-color: rgb(0, 0, 0); border-radius: 0px; padding-bottom: 0px; padding-top: 0px; box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 0px; animation: bounceInUp 1s ease 1.2s 1 both;">
+                                            <div class="element-box-contents" style="width: 100%; height: 100%;"><img id="2576743406" ctype="4" class="element comp_image editable-image" src="../../assets/images/activity/present_double.png" style="width: 164px; height: 80.0655px; margin-top: -0.0327654px; margin-left: 0px;"></div>
+                                        </div>
+                                    </li>
+                                    <!--* title bg *-->
+                                    <li comp-drag="" comp-rotate="" class="comp-resize comp-rotate inside wsite-image" id="inside_757927609" num="9" ctype="4" comp-resize="" data-event="1120601" style="width: 147px; height: 18px; left: 156px; bottom: 320px; z-index: 10; transform: rotateZ(0deg);">
+                                        <div class="element-box" element-anim="" style="top: 284px; left: 156px; width: 100%; height: 100%; z-index: 10; color: rgb(103, 103, 103); opacity: 1; transform: none; text-align: left; border-width: 0px; border-style: solid; border-color: rgb(0, 0, 0); border-radius: 0px; padding-bottom: 0px; padding-top: 0px; box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 0px; animation: twisterInUp 1s ease 2.7s 1 both;">
+                                            <div class="element-box-contents" style="width: 100%; height: 100%;"><img id="757927609" ctype="4" class="element comp_image editable-image" src="../../assets/images/activity/title_bg.png" style="width: 147.044px; height: 18px; margin-left: -0.0220588px; margin-top: 0px;"></div>
+                                        </div>
+                                    </li>
+                                    <!--* title text *-->
+                                    <li comp-drag="" comp-rotate="" class="comp-resize comp-rotate inside wsite-image" id="inside_3833842666" num="10" ctype="4" comp-resize="" data-event="1120601" style="width: 173.351px; height: 12.7942px; left: 147px; bottom: 323px; z-index: 11; transform: rotateZ(0deg);">
+                                        <div class="element-box" element-anim="" style="top: 287px; left: 147px; width: 100%; height: 100%; z-index: 11; color: rgb(103, 103, 103); opacity: 1; transform: none; text-align: left; border-width: 0px; border-style: solid; border-color: rgb(0, 0, 0); border-radius: 0px; padding-bottom: 0px; padding-top: 0px; box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 0px; animation: fadeIn 1s ease 3.7s infinite both;">
+                                            <div class="element-box-contents mytittle" style="width: 100%;height: 100%;text-align: center;color: orangered;font-weight: bold;font-size: 15px;font-family: huakangwawa">
+                                                <!--<img id="3833842666" ctype="4" class="element comp_image editable-image" src="http://cdnoss.zhizuoh5.com/syspic/scene/o_1c1jr0e621pq51lms2d063o64a1j.png?x-oss-process=style/w750" style="width: 173.351px; height: 12.8202px; margin-top: -0.01298px; margin-left: 0px;">-->
+                                                活动内容
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!--* art 满 *-->
+                                    <li v-for="(item ,index) in data.commonActivityRuleContents" comp-drag="" comp-rotate="" class="comp-resize comp-rotate inside wsite-image" id="inside_5963831697" num="11" ctype="4" comp-resize="" data-event="1120601" :style="{width: '29px', height: '24px', left: '162px', bottom: (280 -index*26) + 'px', 'z-index': '12', transform: 'rotateZ(0deg)'}">
+                                        <div class="element-box" element-anim="" style="top: 311px; left: 182px; width: 100%; height: 100%; color: rgb(103, 103, 103); opacity: 1; transform: none; text-align: left; border-width: 0px; border-style: solid; border-color: rgb(0, 0, 0); border-radius: 0px; padding-bottom: 0px; padding-top: 0px; box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 0px; z-index: 12; line-height: 1; animation: lightSpeedIn 1s ease 3.5s 1 both;">
+                                            <div class="element-box-contents" style="width: 100%; height: 100%;"><img id="5963831697" ctype="4" class="element comp_image editable-image" src="../../assets/images/activity/art_man.png" style="width: 29px; height: 24px; margin-top: 0px; margin-left: 0px;"></div>
+                                        </div>
+                                    </li>
+                                    <!--* rule text *-->
+                                    <li v-for="(item ,index) in data.commonActivityRuleContents" comp-drag="" comp-rotate="" class="comp-resize comp-rotate inside wsite-text" id="inside_9569816793" num="13" ctype="2" comp-resize="" :style="{width: '72px', height: '40px', left: '172px', bottom: (270 -index*26) + 'px', 'z-index': '18', transform: 'rotateZ(0deg)'}">
+                                        <div class="element-box" element-anim="" style="top: 303px; left: 192px; width: 100%; height: 100%; font-size: 24px; writing-mode: horizontal-tb; z-index: 18; color: rgb(103, 103, 103); opacity: 1; transform: none; text-align: left; border-width: 0px; border-style: solid; border-color: rgb(0, 0, 0); border-radius: 0px; padding-bottom: 0px; padding-top: 0px; box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 0px; line-height: 1; animation: lightSpeedIn 1s ease 3.5s 1 both;">
+                                            <div class="element-box-contents" style="width: 100%; height: 100%;">
+                                                <div id="9569816793" ctype="2" class="element comp_paragraph editable-text" style="cursor: default; font-size: 24px; width: 72px; height: 40px;">
+                                                    <div style="text-align: center;"><span style="color: rgb(255, 240, 0); background-color: initial; font-weight: bold; font-size: 18px;">{{item.baseMoney / 100}}</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!--* art 送 *-->
+                                    <li v-for="(item ,index) in data.commonActivityRuleContents" comp-drag="" comp-rotate="" class="comp-resize comp-rotate inside wsite-image" id="inside_6845248440" num="12" ctype="4" comp-resize="" data-event="1120601" :style="{width: '26px', height: '22px', left: '228px', bottom: (280 -index*26) + 'px', 'z-index': '13', transform: 'rotateZ(0deg)'}">
+                                        <div class="element-box" element-anim="" style="top: 311px; left: 248px; width: 100%; height: 100%; color: rgb(103, 103, 103); opacity: 1; transform: none; text-align: left; border-width: 0px; border-style: solid; border-color: rgb(0, 0, 0); border-radius: 0px; padding-bottom: 0px; padding-top: 0px; box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 0px; z-index: 13; line-height: 1; animation: lightSpeedIn 1s ease 3.5s 1 both;">
+                                            <div class="element-box-contents" style="width: 100%; height: 100%;">
+                                                <img v-if="data.commonActivityRuleType === 0" id="6845248440" ctype="4" class="element comp_image editable-image" src="../../assets/images/activity/art_jian.png" style="width: 27px; height: 22px; margin-top: 0px; margin-left: 0px;">
+                                                <img v-if="data.commonActivityRuleType === 1" id="6845248440" ctype="4" class="element comp_image editable-image" src="../../assets/images/activity/art_song.png" style="width: 27px; height: 22px; margin-top: 0px; margin-left: 0px;">
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!--* bonus text *-->
+                                    <li v-for="(item ,index) in data.commonActivityRuleContents" comp-drag="" comp-rotate="" class="comp-resize comp-rotate inside wsite-text" id="inside_9175319954" num="14" ctype="2" comp-resize="" :style="{width: '72px', height: '40px', left: '232px', bottom: (270 -index*26) + 'px', 'z-index': '19', transform: 'rotateZ(0deg)'}">
+                                        <div class="element-box" element-anim="" style="top: 302px; left: 252px; width: 100%; height: 100%; font-size: 24px; writing-mode: horizontal-tb; color: rgb(103, 103, 103); opacity: 1; transform: none; text-align: left; border-width: 0px; border-style: solid; border-color: rgb(0, 0, 0); border-radius: 0px; padding-bottom: 0px; padding-top: 0px; box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 0px; z-index: 19; line-height: 1; animation: lightSpeedIn 1s ease 3.5s 1 both;">
+                                            <div class="element-box-contents" style="width: 100%; height: 100%;">
+                                                <div id="9175319954" ctype="2" class="element comp_paragraph editable-text" style="cursor: default; font-size: 24px; width: 72px; height: 40px;">
+                                                    <div style="text-align: center;"><span style="color: rgb(255, 240, 0); background-color: initial; font-weight: bold; font-size: 18px;">{{item.actMoney / 100}}</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!--* date *-->
+                                    <li comp-drag="" comp-rotate="" class="comp-resize comp-rotate inside wsite-text" id="inside_2302273223" num="15" ctype="2" comp-resize="" style="width: 225px;height: 38px;left: 147px;bottom: 153px;z-index: 14;transform: rotateZ(0deg);white-space: nowrap;">
+                                        <div class="element-box" element-anim="" style="top: 324px; left: 178px; width: 100%; height: 100%; font-size: 24px; writing-mode: horizontal-tb; z-index: 14; color: rgb(103, 103, 103); opacity: 1; transform: none; text-align: left; border-width: 0px; border-style: solid; border-color: rgb(0, 0, 0); border-radius: 0px; padding-bottom: 0px; padding-top: 0px; box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 0px; line-height: 1; animation: fadeIn 2s ease 4s 1 both;">
+                                            <div class="element-box-contents" style="width: 100%; height: 100%;">
+                                                <div id="2302273223" ctype="2" class="element comp_paragraph editable-text" style="cursor: default; font-size: 15px; width: 175px; height: 38px;"><span style="color: rgb(255, 255, 255); font-family: hanyi_wh65; font-size: 12px;">活动时间：{{data.commonActivityStartDate + ' ' + '-' + ' ' + data.commonActivityEndDate}}</span></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!--* date *-->
+                                    <li comp-drag="" comp-rotate="" class="comp-resize comp-rotate inside wsite-text" id="inside_2302273224" num="15" ctype="2" comp-resize="" style="width: 219px;height: 70px;left: 147px;bottom: 106px;z-index: 14;transform: rotateZ(0deg);">
+                                        <div class="element-box" element-anim="" style="top: 324px; left: 178px; width: 100%; height: 100%; font-size: 24px; writing-mode: horizontal-tb; z-index: 14; color: rgb(103, 103, 103); opacity: 1; transform: none; text-align: left; border-width: 0px; border-style: solid; border-color: rgb(0, 0, 0); border-radius: 0px; padding-bottom: 0px; padding-top: 0px; box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 0px; line-height: 1; animation: fadeIn 2s ease 4s 1 both;">
+                                            <div class="element-box-contents" style="width: 100%; height: 100%;">
+                                                <div id="2302273224" ctype="2" class="element comp_paragraph editable-text" style="cursor: default;font-size: 15px;width: 230px;height: 38px;"><span style="color: rgb(255, 255, 255); font-family: hanyi_wh65; font-size: 12px;">活动说明：{{data.commonActivityName}}</span></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!--* slogan *-->
+                                    <li comp-drag="" comp-rotate="" class="comp-resize comp-rotate inside wsite-image" id="inside_9776295024" num="16" ctype="4" comp-resize="" data-event="1120601" style="width: 148px; height: 31px; left: 161px; bottom: 100px; z-index: 15; transform: rotateZ(0deg);">
+                                        <div class="element-box" element-anim="" style="top: 357px; left: 161px; width: 100%; height: 100%; z-index: 15; color: rgb(103, 103, 103); opacity: 1; transform: none; text-align: left; border-width: 0px; border-style: solid; border-color: rgb(0, 0, 0); border-radius: 0px; padding-bottom: 0px; padding-top: 0px; box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 0px; animation: bounceIn 1s ease 4s 1 both;">
+                                            <div class="element-box-contents" style="width: 100%; height: 100%;"><img id="9776295024" ctype="4" class="element comp_image editable-image" src="../../assets/images/activity/slogan.png" style="width: 148.035px; height: 31px; margin-left: -0.0174051px; margin-top: 0px;"></div>
+                                        </div>
+                                    </li>
+                                    <li comp-drag="" comp-rotate="" class="comp-resize comp-rotate inside wsite-text" id="inside_8293066577" num="17" ctype="2" comp-resize="" style="width: 310px; height: 38px; left: 5px; top: -2px; z-index: 16; transform: rotateZ(0deg);">
+                                        <div class="element-box" element-anim="" style="top: -2px; left: 5px; width: 100%; height: 100%; font-size: 24px; writing-mode: horizontal-tb; z-index: 16; color: rgb(103, 103, 103); opacity: 1; transform: none; text-align: left; border-width: 0px; border-style: solid; border-color: rgb(0, 0, 0); border-radius: 0px; padding-bottom: 0px; padding-top: 0px; box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 0px; line-height: 1; animation: twisterInUp 1s ease 0s 1 both;">
+                                            <div class="element-box-contents" style="width: 100%; height: 100%;">
+                                                <div id="8293066577" ctype="2" class="element comp_paragraph editable-text" style="cursor: default; font-size: 24px; width: 310px; height: 38px;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!--* little man gif *-->
+                                    <li comp-drag="" comp-rotate="" class="comp-resize comp-rotate inside wsite-image" id="inside_6649909330" num="18" ctype="4" comp-resize="" data-event="1120601" style="width: 238px; height: 238px; left: -14px; bottom: 145px; z-index: 17; transform: rotateZ(0deg);">
+                                        <div class="element-box" element-anim="" style="top: 219px; left: -14px; width: 100%; height: 100%; z-index: 17; color: rgb(103, 103, 103); opacity: 1; transform: none; text-align: left; border-width: 0px; border-style: solid; border-color: rgb(0, 0, 0); border-radius: 0px; padding-bottom: 0px; padding-top: 0px; box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 0px; line-height: 1; animation: fadeIn 3s linear 0s 1 both;">
+                                            <div class="element-box-contents" style="width: 100%; height: 100%;"><img id="6649909330" ctype="4" class="element comp_image editable-image" src="../../assets/images/activity/little_man.gif" style="width: 214px; height: 214px; margin-left: 0px; margin-top: 0px;"></div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div class="share-btn" :data-clipboard-text="spreadUrl">分享</div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+    </v-content>
+</div>
+</template>
+<script>
+    //* 引用工具函数包并以混入的形式加载
+    import util from '../../assets/js/util'
+
+    import $ from 'jquery'
+    export default {
+        data() {
+            return {
+                activityid: '',
+                data: {
+                    title: '双十二购物节',
+                    content: [{
+                        ruleMoney: 100,
+                        ruleMoney: 20,
+                        type: 0,
+                    }, {
+                        ruleMoney: 200,
+                        ruleMoney: 50,
+                        type: 0,
+                    }],
+                    date: '2018.12.01 - 2018. 12.13',
+                    description: '凡活动期间充值用户，均可参与此活动。此活动解释权归商户所有。',
+                    spreadUrl: '',
+                },
+            }
+        },
+        mounted() {
+            this.getData();
+            let testData = {
+                "commonActivityId": "33a869e57eac4d2385879d241801922d",
+                "commonActivityName": "五一送大包",
+                "commonActivityDes": "五一送大包",
+                "commonActivityStartTime": "2019-05-01 11:53:00.0",
+                "commonActivityEndTime": "2019-06-01 11:54:00.0",
+                "commonActivityRange": 1,
+                "commonActivityRule": "{\"contents\":[{\"actMoney\":150,\"baseMoney\":300}],\"type\":0}",
+                "commonActivityScript": "package com.goldpac.ocs.common.memberbusiness.util.activityrule;\nimport com.goldpac.ocs.common.memberbusiness.util.activityrule.ActivityReuslt;\nrule rule00\n  salience 100\n  lock-on-active true\n  when\n   $trade:ActivityReuslt(tradeMoney >= 300)\n  then\n       $trade.setTradeMoney($trade.getTradeMoney());\n       $trade.setPayMoney($trade.getTradeMoney() - 150);\n  end",
+                "commonActivityUrl": null,
+                "commonActivityType": 0,
+                "commonActivityPromotionPlatform": 0,
+                "commonActivityStatus": 0,
+                "commonActivityIsDelete": 0,
+                "commonActivityAdder": "啊实打实的阿萨德按时",
+                "commonActivityAddTime": 1548590021000,
+                "commonActivityModifyer": null,
+                "commonActivityModifyTime": 1548590021000,
+                "commonActivityChannel": "OCS",
+                "commonActivityScene": "MemberService",
+                "commonActivityMerchantId": "9cc807999cc241149c6b0874784f8fd3",
+                "commonActivityMerchantName": "啊实打实的阿萨德按时",
+                "commonActivityNotes": null,
+                "commonActivityReserver1": null,
+                "commonActivityReserver2": null,
+                "commonActivityReserver3": null,
+                "commonActivityReserver4": null
+            }
+            this.spreadUrl = location.href;
+            let clipboard = new ClipboardJS('.share-btn');
+            let global = this;
+            clipboard.on('success', function(e) {
+                global.toast('分享链接已成功复制啦');
+                e.clearSelection();
+            });
+        },
+        methods: {
+            getData() {
+                this.data = JSON.parse(sessionStorage.getItem('activityDetail'));
+                this.data.commonActivityRuleType = JSON.parse(this.data.commonActivityRule).type;
+                this.data.commonActivityRuleContents = JSON.parse(this.data.commonActivityRule).contents;
+                this.data.commonActivityStartDate = this.data.commonActivityStartTime.substring(0, 10);
+                this.data.commonActivityEndDate = this.data.commonActivityEndTime.substring(0, 10);
+            },
+            //该方法是用于提示该功能尚未开放，当商品下架的时候
+            test() {
+                this.toast('该功能尚未开放，敬请期待');
+            }
+        },
+        mixins: [util]
+    }
+
+</script>

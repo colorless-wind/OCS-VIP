@@ -1,0 +1,744 @@
+<style lang="less" scoped>
+    @import "../assets/less/config";
+
+    * {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box
+    }
+
+
+
+    ::-moz-selection {
+        background: #b3d4fc;
+        text-shadow: none
+    }
+
+    ::selection {
+        background: #b3d4fc;
+        text-shadow: none
+    }
+
+    .span,
+    .span_large {
+        /*
+        min-width: 100px;
+        min-height: 100px;
+        line-height: 100px;
+*/
+        margin-bottom: 36px;
+        vertical-align: middle;
+        border-radius: 1px;
+        display: inline-block;
+    }
+
+
+    .timer {
+        width: 24px;
+        height: 24px;
+        background-color: transparent;
+        box-shadow: inset 0 0 0 2px #fff;
+        border-radius: 50%;
+        position: relative;
+        margin: 0px auto
+    }
+
+    .timer:after,
+    .timer:before {
+        position: absolute;
+        content: "";
+        background-color: #fff
+    }
+
+    .timer:after {
+        width: 10px;
+        height: 2px;
+        top: 11px;
+        left: 11px;
+        -webkit-transform-origin: 1px 1px;
+        -moz-transform-origin: 1px 1px;
+        transform-origin: 1px 1px;
+        -webkit-animation: minhand 2s linear infinite;
+        -moz-animation: minhand 2s linear infinite;
+        animation: minhand 2s linear infinite
+    }
+
+    .timer:before {
+        width: 8px;
+        height: 2px;
+        top: 11px;
+        left: 11px;
+        -webkit-transform-origin: 1px 1px;
+        -moz-transform-origin: 1px 1px;
+        transform-origin: 1px 1px;
+        -webkit-animation: hrhand 8s linear infinite;
+        -moz-animation: hrhand 8s linear infinite;
+        animation: hrhand 8s linear infinite
+    }
+
+    @-webkit-keyframes minhand {
+        0% {
+            -webkit-transform: rotate(0deg)
+        }
+        100% {
+            -webkit-transform: rotate(360deg)
+        }
+    }
+
+    @-moz-keyframes minhand {
+        0% {
+            -moz-transform: rotate(0deg)
+        }
+        100% {
+            -moz-transform: rotate(360deg)
+        }
+    }
+
+    @keyframes minhand {
+        0% {
+            transform: rotate(0deg)
+        }
+        100% {
+            transform: rotate(360deg)
+        }
+    }
+
+    @-webkit-keyframes hrhand {
+        0% {
+            -webkit-transform: rotate(0deg)
+        }
+        100% {
+            -webkit-transform: rotate(360deg)
+        }
+    }
+
+    @-moz-keyframes hrhand {
+        0% {
+            -moz-transform: rotate(0deg)
+        }
+        100% {
+            -moz-transform: rotate(360deg)
+        }
+    }
+
+    @keyframes hrhand {
+        0% {
+            transform: rotate(0deg)
+        }
+        100% {
+            transform: rotate(360deg)
+        }
+    }
+
+    .typing_loader {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        -webkit-animation: typing 1s linear infinite alternate;
+        -moz-animation: Typing 1s linear infinite alternate;
+        -ms-animation: Typing 1s linear infinite alternate;
+        animation: typing 1s linear infinite alternate;
+        margin: 0px auto;
+        position: relative;
+        left: -12px
+    }
+
+    @-webkit-keyframes typing {
+        0% {
+            background-color: #fff;
+            box-shadow: 12px 0 0 0 rgba(255, 255, 255, .2), 24px 0 0 0 rgba(255, 255, 255, .2)
+        }
+        25% {
+            background-color: rgba(255, 255, 255, .4);
+            box-shadow: 12px 0 0 0 #fff, 24px 0 0 0 rgba(255, 255, 255, .2)
+        }
+        75% {
+            background-color: rgba(255, 255, 255, .4);
+            box-shadow: 12px 0 0 0 rgba(255, 255, 255, .2), 24px 0 0 0 #fff
+        }
+    }
+
+    @-moz-keyframes typing {
+        0% {
+            background-color: #fff;
+            box-shadow: 12px 0 0 0 rgba(255, 255, 255, .2), 24px 0 0 0 rgba(255, 255, 255, .2)
+        }
+        25% {
+            background-color: rgba(255, 255, 255, .4);
+            box-shadow: 12px 0 0 0 #fff, 24px 0 0 0 rgba(255, 255, 255, .2)
+        }
+        75% {
+            background-color: rgba(255, 255, 255, .4);
+            box-shadow: 12px 0 0 0 rgba(255, 255, 255, .2), 24px 0 0 0 #fff
+        }
+    }
+
+    @keyframes typing {
+        0% {
+            background-color: #fff;
+            box-shadow: 12px 0 0 0 rgba(255, 255, 255, .2), 24px 0 0 0 rgba(255, 255, 255, .2)
+        }
+        25% {
+            background-color: rgba(255, 255, 255, .4);
+            box-shadow: 12px 0 0 0 #fff, 24px 0 0 0 rgba(255, 255, 255, .2)
+        }
+        75% {
+            background-color: rgba(255, 255, 255, .4);
+            box-shadow: 12px 0 0 0 rgba(255, 255, 255, .2), 24px 0 0 0 #fff
+        }
+    }
+
+
+    .coffee_cup {
+        width: 20px;
+        height: 24px;
+        border: 1px #fff solid;
+        border-radius: 0 0 5px 5px;
+        position: relative;
+        margin: 0px auto
+    }
+
+    .coffee_cup:after,
+    .coffee_cup:before {
+        position: absolute;
+        content: ""
+    }
+
+    .coffee_cup:after {
+        width: 5px;
+        height: 12px;
+        border: 1px #fff solid;
+        border-left: 0;
+        border-radius: 0 20px 20px 0;
+        left: 20px
+    }
+
+    .coffee_cup:before {
+        width: 1px;
+        height: 6px;
+        background-color: #fff;
+        top: -10px;
+        left: 4px;
+        box-shadow: 5px 0 0 0 #fff, 5px -5px 0 0 #fff, 10px 0 0 0 #fff;
+        -webkit-animation: steam 1s linear infinite alternate;
+        -moz-animation: steam 1s linear infinite alternate;
+        animation: steam 1s linear infinite alternate
+    }
+
+    @-webkit-keyframes steam {
+        0% {
+            height: 0
+        }
+        100% {
+            height: 6px
+        }
+    }
+
+    @-moz-keyframes steam {
+        0% {
+            height: 0
+        }
+        100% {
+            height: 6px
+        }
+    }
+
+    @keyframes steam {
+        0% {
+            height: 0
+        }
+        100% {
+            height: 6px
+        }
+    }
+
+    .square {
+        width: 20px;
+        height: 20px;
+        border: 1px #fff solid;
+        margin: 0px auto;
+        position: relative;
+        -webkit-animation: fill_color 5s linear infinite;
+        -moz-animation: fill_color 5s linear infinite;
+        animation: fill_color 5s linear infinite
+    }
+
+    .square:after {
+        width: 4px;
+        height: 4px;
+        position: absolute;
+        content: "";
+        background-color: #fff;
+        top: -8px;
+        left: 0;
+        -webkit-animation: square_check 1s ease-in-out infinite;
+        -moz-animation: square_check 1s ease-in-out infinite;
+        animation: square_check 1s ease-in-out infinite
+    }
+
+    @-webkit-keyframes square_check {
+        25% {
+            left: 22px;
+            top: -8px
+        }
+        50% {
+            left: 22px;
+            top: 22px
+        }
+        75% {
+            left: -9px;
+            top: 22px
+        }
+        100% {
+            left: -9px;
+            top: -7px
+        }
+    }
+
+    @-moz-keyframes square_check {
+        25% {
+            left: 22px;
+            top: -8px
+        }
+        50% {
+            left: 22px;
+            top: 22px
+        }
+        75% {
+            left: -9px;
+            top: 22px
+        }
+        100% {
+            left: -9px;
+            top: -7px
+        }
+    }
+
+    @keyframes square_check {
+        25% {
+            left: 22px;
+            top: -8px
+        }
+        50% {
+            left: 22px;
+            top: 22px
+        }
+        75% {
+            left: -9px;
+            top: 22px
+        }
+        100% {
+            left: -9px;
+            top: -7px
+        }
+    }
+
+    @-webkit-keyframes fill_color {
+        0% {
+            box-shadow: inset 0 0 0 0 rgba(255, 255, 255, .1)
+        }
+        100% {
+            box-shadow: inset 0 -20px 0 0 #fff
+        }
+    }
+
+    @-moz-keyframes fill_color {
+        0% {
+            box-shadow: inset 0 0 0 0 rgba(255, 255, 255, .1)
+        }
+        100% {
+            box-shadow: inset 0 -20px 0 0 #fff
+        }
+    }
+
+    @keyframes fill_color {
+        0% {
+            box-shadow: inset 0 0 0 0 rgba(255, 255, 255, .1)
+        }
+        100% {
+            box-shadow: inset 0 -20px 0 0 #fff
+        }
+    }
+
+    .circle {
+        margin: 0px auto;
+        position: relative;
+        width: 8px;
+        height: 8px;
+        background-color: rgba(255, 255, 255, .5);
+        box-shadow: -14px 0 0 #fff;
+        border-radius: 50%;
+        -webkit-animation: circle_classic 1s ease-in-out infinite alternate;
+        -moz-animation: circle_classic 1s ease-in-out infinite alternate;
+        animation: circle_classic 1s ease-in-out infinite alternate
+    }
+
+    @-webkit-keyframes circle_classic {
+        0% {
+            opacity: .1;
+            -webkit-transform: rotate(0deg) scale(.5)
+        }
+        100% {
+            opacity: 1;
+            -webkit-transform: rotate(360deg) scale(1.2)
+        }
+    }
+
+    @-moz-keyframes circle_classic {
+        0% {
+            opacity: .1;
+            -moz-transform: rotate(0deg) scale(.5)
+        }
+        100% {
+            opacity: 1;
+            -moz-transform: rotate(360deg) scale(1.2)
+        }
+    }
+
+    @keyframes circle_classic {
+        0% {
+            opacity: .1;
+            transform: rotate(0deg) scale(.5)
+        }
+        100% {
+            opacity: 1;
+            transform: rotate(360deg) scale(1.2)
+        }
+    }
+
+    .cloud {
+        margin: 42px 30px;
+        width: 4px;
+        height: 10px;
+        opacity: .5;
+        position: relative;
+        box-shadow: 6px 0 0 0 #fff, 12px 0 0 0 #fff, 18px 0 0 0 #fff, 24px 0 0 0 #fff, 30px 0 0 0 #fff, 36px 0 0 0 #fff;
+        -webkit-animation: rain 1s linear infinite alternate;
+        -moz-animation: rain 1s linear infinite alternate;
+        animation: rain 1s linear infinite alternate
+    }
+
+    .cloud:after {
+        width: 40px;
+        height: 10px;
+        position: absolute;
+        content: "";
+        background-color: #fff;
+        top: 0;
+        opacity: 1;
+        -webkit-animation: line_flow 2s linear infinite reverse;
+        -moz-animation: line_flow 2s linear infinite reverse;
+        animation: line_flow 2s linear infinite reverse
+    }
+
+    @-webkit-keyframes rain {
+        0% {
+            box-shadow: 6px 0 0 0 #fff, 12px 0 0 0 rgba(255, 255, 255, .9), 18px 0 0 0 rgba(255, 255, 255, .7), 24px 0 0 0 rgba(255, 255, 255, .6), 30px 0 0 0 rgba(255, 255, 255, .3), 36px 0 0 0 rgba(255, 255, 255, .2)
+        }
+        100% {
+            box-shadow: 6px 0 0 0 rgba(255, 255, 255, .2), 12px 0 0 0 rgba(255, 255, 255, .3), 18px 0 0 0 rgba(255, 255, 255, .6), 24px 0 0 0 rgba(255, 255, 255, .7), 30px 0 0 0 rgba(255, 255, 255, .9), 36px 0 0 0 #fff;
+            opacity: 1
+        }
+    }
+
+    @-moz-keyframes rain {
+        0% {
+            box-shadow: 6px 0 0 0 #fff, 12px 0 0 0 rgba(255, 255, 255, .9), 18px 0 0 0 rgba(255, 255, 255, .7), 24px 0 0 0 rgba(255, 255, 255, .6), 30px 0 0 0 rgba(255, 255, 255, .3), 36px 0 0 0 rgba(255, 255, 255, .2)
+        }
+        100% {
+            box-shadow: 6px 0 0 0 rgba(255, 255, 255, .2), 12px 0 0 0 rgba(255, 255, 255, .3), 18px 0 0 0 rgba(255, 255, 255, .6), 24px 0 0 0 rgba(255, 255, 255, .7), 30px 0 0 0 rgba(255, 255, 255, .9), 36px 0 0 0 #fff;
+            opacity: 1
+        }
+    }
+
+    @keyframes rain {
+        0% {
+            box-shadow: 6px 0 0 0 #fff, 12px 0 0 0 rgba(255, 255, 255, .9), 18px 0 0 0 rgba(255, 255, 255, .7), 24px 0 0 0 rgba(255, 255, 255, .6), 30px 0 0 0 rgba(255, 255, 255, .3), 36px 0 0 0 rgba(255, 255, 255, .2)
+        }
+        100% {
+            box-shadow: 6px 0 0 0 rgba(255, 255, 255, .2), 12px 0 0 0 rgba(255, 255, 255, .3), 18px 0 0 0 rgba(255, 255, 255, .6), 24px 0 0 0 rgba(255, 255, 255, .7), 30px 0 0 0 rgba(255, 255, 255, .9), 36px 0 0 0 #fff;
+            opacity: 1
+        }
+    }
+
+    @-webkit-keyframes line_flow {
+        0% {
+            width: 0
+        }
+        100% {
+            width: 40px
+        }
+    }
+
+    @-moz-keyframes line_flow {
+        0% {
+            width: 0
+        }
+        100% {
+            width: 40px
+        }
+    }
+
+    @keyframes line_flow {
+        0% {
+            width: 0
+        }
+        100% {
+            width: 40px
+        }
+    }
+
+    .colorful_circle {
+        width: 40px;
+        height: 40px;
+        display: inline-block;
+        padding: 0;
+        border-radius: 100%;
+        border: 8px solid;
+        border-top-color: rgba(254, 168, 23, .65);
+        border-bottom-color: rgba(57, 154, 219, .65);
+        border-left-color: rgba(188, 84, 93, .95);
+        border-right-color: rgba(137, 188, 79, .95);
+        -webkit-animation: colorful_circle 2s ease-in-out infinite alternate;
+        animation: colorful_circle 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes colorful_circle {
+        from {
+            transform: rotate(0deg)
+        }
+
+        to {
+            transform: rotate(720deg)
+        }
+    }
+
+    @-webkit-keyframes colorful_circle {
+        from {
+            -webkit-transform: rotate(0deg)
+        }
+
+        to {
+            -webkit-transform: rotate(720deg)
+        }
+    }
+
+    .circles {
+        display: inline-block;
+        font-size: 0;
+        padding: 0
+    }
+
+    .circles span {
+        vertical-align: middle;
+        border-radius: 100%;
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        margin: 3px 2px;
+        -webkit-animation: circles .8s linear infinite alternate;
+        animation: circles .8s linear infinite alternate;
+    }
+
+    .circles span:nth-child(1) {
+        -webkit-animation-delay: -1s;
+        animation-delay: -1s;
+        background: rgba(245, 103, 115, .6)
+    }
+
+    .circles span:nth-child(2) {
+        -webkit-animation-delay: -.8s;
+        animation-delay: -.8s;
+        background: rgba(245, 103, 115, .8)
+    }
+
+    .circles span:nth-child(3) {
+        -webkit-animation-delay: -.26666s;
+        animation-delay: -.26666s;
+        background: #f56773
+    }
+
+    .circles span:nth-child(4) {
+        -webkit-animation-delay: -.8s;
+        animation-delay: -.8s;
+        background: rgba(245, 103, 115, .8)
+    }
+
+    .circles span:nth-child(5) {
+        -webkit-animation-delay: -1s;
+        animation-delay: -1s;
+        background: rgba(245, 103, 115, .4)
+    }
+
+    @keyframes circles {
+        from {
+            transform: scale(0, 0)
+        }
+
+        to {
+            transform: scale(1, 1)
+        }
+    }
+
+    @-webkit-keyframes circles {
+        from {
+            -webkit-transform: scale(0, 0)
+        }
+
+        to {
+            -webkit-transform: scale(1, 1)
+        }
+    }
+
+    .wave {
+        width: 50px;
+        height: 50px;
+        display: inline-block;
+        padding: 0;
+        text-align: left
+    }
+
+    .wave span {
+        position: absolute;
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        border-radius: 100%;
+        /*background: #87d37c;*/
+        background-color: #03ff00;
+        -webkit-animation: wave 1.5s linear infinite;
+        animation: wave 1.5s linear infinite
+    }
+
+    .wave span:last-child {
+        animation-delay: -.9s;
+        -webkit-animation-delay: -.9s
+    }
+
+    @keyframes wave {
+        0% {
+            transform: scale(0, 0);
+            opacity: .8
+        }
+
+        100% {
+            transform: scale(1, 1);
+            opacity: 0
+        }
+    }
+
+    @-webkit-keyframes wave {
+        0% {
+            -webkit-transform: scale(0, 0);
+            opacity: .8
+        }
+
+        100% {
+            -webkit-transform: scale(1, 1);
+            opacity: 0
+        }
+    }
+
+    .loading-box {
+        width: 100%;
+        text-align: center;
+        height: 100%;
+        position: absolute;
+        top:0;
+        z-index: 999999;
+        background-color: rgba(0, 0, 0, 0.6);
+        padding-top: 70%;
+        overflow: hidden;
+    }
+
+    .loading-msg {
+        color: white;
+    }
+
+    .show {
+        display: block;
+    }
+
+    .hide {
+        display: none;
+    }
+
+</style>
+<template>
+    <div :class="load?'show':'hide'">
+        <div class="loading-box">
+            <!--* 方块 *-->
+            <div class="span" v-if="type===1">
+                <div class="square"></div>
+            </div>
+            <!--* 咖啡杯 *-->
+            <div class="span" v-if="type===2">
+                <div class="coffee_cup"></div>
+            </div>
+            <!--* 计时器 *-->
+            <div class="span" v-if="type===3">
+                <div class="timer"></div>
+            </div>
+            <!--* 3光点 *-->
+            <div class="span" v-if="type===4">
+                <div class="typing_loader"></div>
+            </div>
+            <!--* 4色圆环 *-->
+            <div class="span" v-if="type===5">
+                <div class="colorful_circle"></div>
+            </div>
+            <!--* 5光点 *-->
+            <div class="span" v-if="type===6">
+                <div class="circles">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+            <!--* 波纹效果 *-->
+            <div class="span" v-if="type===7">
+                <div class="wave">
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+            <!--* 提示信息 *-->
+            <div class="loading-msg">{{msg}}</div>
+        </div>
+    </div>
+</template>
+<script>
+    export default {
+        props: {
+            //* 动画的类型
+            type: {
+                type: Number,
+                default: 1
+            },
+            //* 提示文字信息
+            msg: {
+                type: String,
+                default: '疯狂加载中···'
+            },
+            //* 是否启用加载动画
+            load: {
+                type: Boolean,
+                default: false
+            }
+        },
+        data() {
+            return {
+
+            }
+        },
+        mounted() {
+
+        },
+        beforeDestroy() {
+
+        }
+    }
+
+</script>

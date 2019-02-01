@@ -1,0 +1,405 @@
+<style lang="less" scoped>
+    @import "../../assets/less/config";
+
+    #chargeIndexPage.content {
+        background-color: white;
+    }
+
+    #chargeIndexPage .charge-index {
+        margin: 0;
+    }
+
+    #chargeIndexPage .charge-index .banner {}
+
+    #chargeIndexPage .charge-index .banner img {
+        width: 100%;
+    }
+
+    #chargeIndexPage .charge-index .title {
+        padding: 5px 15px;
+        font-size: 16px;
+        margin-top: 20px;
+    }
+
+    #chargeIndexPage .charge-index hr {
+        margin-bottom: 10%;
+        border: none;
+        border-bottom: 1px solid #D9D9D9;
+    }
+
+    #chargeIndexPage .charge-index .charge-btn {
+        text-align: center;
+        padding-top: 10%;
+    }
+
+    #chargeIndexPage .charge-index .charge-btn button {
+        width: 50%;
+        line-height: 38px;
+        border-radius: 5px;
+        border: none;
+        font-size: 14px;
+        color: #fff;
+        background: #62a8ea;
+    }
+
+    #chargeIndexPage .charge-index .charge-input {
+        padding: 20px 15px;
+        font-size: 22px;
+    }
+
+    #chargeIndexPage .charge-index .charge-input input {
+        border: none;
+        font-size: 20px;
+    }
+
+    #chargeIndexPage .charge-index .charge-input input::-webkit-input-placeholder {
+        /* WebKit, Blink, Edge */
+        color: #ccc;
+    }
+
+    #chargeIndexPage .charge-index .charge-input input:-moz-placeholder {
+        /* Mozilla Firefox 4 to 18 */
+        color: #ccc;
+    }
+
+    #chargeIndexPage .charge-index .charge-input input::-moz-placeholder {
+        /* Mozilla Firefox 19+ */
+        color: #ccc;
+    }
+
+    #chargeIndexPage .charge-index .charge-input input:-ms-input-placeholder {
+        /* Internet Explorer 10-11 */
+        color: #ccc;
+    }
+
+    #chargeIndexPage .charge-index .marquee-content {
+        /*        text-align: center;*/
+        padding-left: 15px;
+    }
+
+    #chargeIndexPage .charge-index .marquee-content img {
+        width: 18px;
+        vertical-align: text-bottom;
+        margin-right: 5px;
+    }
+
+</style>
+<style>
+    /*#chargeIndexPage .charge-index .vux-radio-icon {
+        width: 30px;
+        height: auto;
+    }
+
+    #chargeIndexPage .weui-cells {
+        margin-top: 5px;
+    }
+
+    #chargeIndexPage .charge-index .weui-cells_radio .weui-check:checked+.weui-icon-checked:before {
+        color: #118ee9;
+    }*/
+
+</style>
+<template>
+<div>
+    <v-header title=""></v-header>
+    <v-content id="chargeIndexPage">
+        <div class="charge-index">
+            <!--* banner *-->
+            <div class="banner">
+                <img src="../../assets/images/charge/banner.jpg" />
+            </div>
+            <!--* marquee *-->
+            <marquee>
+                <marquee-item v-for="i in 2" :key="i">
+                    <div class="marquee-content"><img src="../../assets/images/icon/volume.png" />平台优惠活动：满百送十，欢迎充值！</div>
+                </marquee-item>
+            </marquee>
+            <!--* 充值 *-->
+            <P class="title">充值金额</P>
+            <P class="charge-input">￥ <input type="tel" placeholder="请输入充值金额" maxlength="7" v-model="chargeMoney" /></P>
+            <hr>
+            <!--* 支付方式 *-->
+            <P class="title">请选择充值方式</P>
+            <group>
+                <radio title="title" :options="payOptions" v-model="selectedPayWay"></radio>
+            </group>
+            <!--* 充值按钮 *-->
+            <div class="charge-btn">
+                <button type="button" @click="getActivity">立即充值</button>
+            </div>
+            
+            <div class="payPics" v-show="false">
+                <img src="../../assets/images/charge/wechat_pay.png" />
+                <img src="../../assets/images/charge/zhifubao_pay.png" />
+                <img src="../../assets/images/charge/bank_pay.png" />
+            </div>
+        </div>
+    </v-content>
+</div>
+</template>
+<script>
+    //* 引用工具函数包并以混入的形式加载
+    import util from '../../assets/js/util'
+    //* 引用jQuery库
+    import $ from 'jquery'
+    //* 引用vux组件
+    import {
+        Group,
+        Cell,
+        Radio,
+        Marquee,
+        MarqueeItem
+    } from 'vux'
+
+    export default {
+        components: {
+            Group,
+            Cell,
+            Radio,
+            Marquee,
+            MarqueeItem
+        },
+        data() {
+            return {
+                //* 设置默认选中的支付方式
+                selectedPayWay :'wxpay' ,
+                //* 支付方式配置
+                payOptions: [{
+                    icon: 'http://dn-placeholder.qbox.me/110x110/FF2D55/000',
+                    key: 'wxpay',
+                    value: '微信支付'
+                }, {
+                    icon: 'http://dn-placeholder.qbox.me/110x110/FF2D55/000',
+                    key: 'alipay',
+                    value: '支付宝支付',
+                }, {
+                    icon: 'http://dn-placeholder.qbox.me/110x110/FF2D55/000',
+                    key: 'bankpay',
+                    value: '银联支付',
+                }],
+                //* 是否启用加载动画
+                enableLoading: true,
+                //* 加载动画显示状态
+                loading: false,
+                //* 加载动画提示文字
+                loadingMsg: '',
+                //* 充值金额
+                chargeMoney: '',
+                //* 微信支付参数
+                wxPayParam: {
+                    //* 时间戳 微信API参数
+                    "timeStamp": '',
+                    //* 签名类型 微信API参数
+                    "signType": "MD5",
+                    //* 包名 微信API参数
+                    "package": '',
+                    //* 公众号id 微信API参数
+                    "appId": '',
+                    //* 生成签名的随机串 微信API参数
+                    "nonceStr": '',
+                    //* 签名 微信API参数
+                    "paySign": ''
+                }
+            }
+        },
+        mounted() {
+            //* 设定支付方式图标
+            this.payOptions[0].icon = $('.payPics').find('img')[0].src;
+            this.payOptions[1].icon = $('.payPics').find('img')[1].src;
+            this.payOptions[2].icon = $('.payPics').find('img')[2].src;
+        },
+        methods: {
+            /**
+             * 功能 调用微信支付
+             * 参数 无
+             * 返回 无
+             **/
+            wxPay: function() {
+                // var data = {
+                // "timeStamp":"1495111085",
+                // "signType":"MD5",
+                // "package":"prepay_id=wx20170518203805c6fb7213b20085122577",
+                // "appId":"wxb682f27fc36ca21b",
+                // "nonceStr":"XJelL2ZWroJPuRyF3CjGJxzCuKRfmz0e",
+                // "paySign":"EF9FA8423258108574882E83EBA67BBA"};
+                var data = {
+                    "timeStamp": this.wxPayParam.timeStamp,
+                    "signType": this.wxPayParam.signType,
+                    "package": this.wxPayParam.package,
+                    "appId": this.wxPayParam.appId,
+                    "nonceStr": this.wxPayParam.nonceStr,
+                    "paySign": this.wxPayParam.paySign
+                };
+
+                alert(JSON.stringify(data))
+                if (!data) return false;
+                //* 发起支付请求
+                WeixinJSBridge.invoke(
+                    'getBrandWCPayRequest',
+                    data,
+                    function(res) {
+                        //* 状态信息
+                        //* get_brand_wcpay_request:ok 支付成功
+                        //* get_brand_wcpay_request:fail 支付失败
+                        //* get_brand_wcpay_request:cancel 支付过程中用户取消
+                        //* get_brand_wcpay_request:ok 仅在用户成功完成支付时返回。由于前端交互复杂，get_brand_wcpay_request:cancel 或者 get_brand_wcpay_request:fail 可以统一处理为用户遇到错误或者主动放弃，不必细化区分
+                        if (res.err_msg == "get_brand_wcpay_request:ok") {
+                            //location.href = location.href.replace(location.search, '').replace('?#', '#').replace('payconfirm', 'paysuccess');
+                        } else {
+                            alert(res.err_msg);
+                            //alert(JSON.stringify(res));
+                        }
+                    });
+            },
+            /**
+             * 功能 调用微信支付前，检测支付环境（微信API是否生效）
+             * 参数 无
+             * 返回 无
+             **/
+            checkPayEnv: function() {
+                if (typeof WeixinJSBridge == "undefined") {
+                    if (document.addEventListener) {
+                        document.addEventListener('WeixinJSBridgeReady', this.wxPay, false);
+                    } else if (document.attachEvent) {
+                        document.attachEvent('WeixinJSBridgeReady', this.wxPay);
+                        document.attachEvent('onWeixinJSBridgeReady', this.wxPay);
+                    }
+                } else {
+                    //* 调用微信支付
+                    this.wxPay();
+                }
+            },
+            /**
+             * 功能 调用微信支付前，检测支付环境（微信API是否生效）
+             * 参数 无
+             * 返回 无
+             **/
+            addOrder(finalMoney) {
+                var testparam = {
+                    "channel": "OCS",
+                    "scene": "MemberService",
+                    "userName": "15611740510",
+                    "userId": "9d3278dc97894f7098de8288b8776e68",
+                    "permissionId": "ef0ed71b070c41ed93decdc2424c5d09",
+                    "merchantId": "8374f2833044427a8d96afa5779c904c",
+                    "merchantName": "测试账户002",
+
+                    "favMoney": 0,
+                    "favfare": 0,
+                    "fare": 0,
+                    "payMoney": 300,
+                    "money": 300,
+                    "orderNo": "1234567890",
+                    "goods": [{
+                        "goodId": "12345",
+                        "goodName": "ewfqr",
+                        "num": 1,
+                        "price": 30,
+                        "realPrice": 300,
+                        "favmoney": 300,
+                        "promotiontype": 1,
+                        "promotion": 0
+                    }]
+                }
+                //* 设定加载提示信息
+                this.loadingMsg = this.CONST.MSG.commonLoading;
+                //* 发送请求
+                this.post(this.CONST.BASE_URL, this.getSendData({
+                    userId: localStorage.getItem('id') || 'not login',
+                    permissionId: localStorage.getItem('token') || 'not login',
+                    userName: localStorage.getItem('username') || 'not login',
+                    merchantId: sessionStorage.getItem('merchantId') || 'no merchantId',
+                    merchantName: sessionStorage.getItem('merchantName') || 'no merchantName',
+                    favMoney: 0,
+                    favfare: 0,
+                    fare: 0,
+                    payMoney: finalMoney || 'no final money',
+                    money: 300,
+                    orderNo: '1234567890',
+                    goods: [{
+                        goodId: '0',
+                        goodName: 'range rover',
+                        num: 1,
+                        price: 30,
+                        realPrice: 300,
+                        favmoney: 300,
+                        promotiontype: 1,
+                        promotion: 0
+                    }]
+                }, this.CONST.APP_ID, this.CONST.METHOD.addOrder, this.CONST.PWD), this).then((response) => {
+                    console.log('访问成功');
+                    console.log(response);
+                    if (0 == response.subStatus && 0 == response.status) {
+                        //* 获取支付方式
+                        console.log(this.selectedPayWay);
+                        //* 设定支付参数
+                        this.wxPayParam.timeStamp = response.data.timestamp;
+                        this.wxPayParam.package = response.data.packageStr;
+                        this.wxPayParam.appId = response.data.appId;
+                        this.wxPayParam.nonceStr = response.data.nonceStr;
+                        this.wxPayParam.paySign = response.data.sign;
+                        //* 检测支付环境
+                        this.checkPayEnv();
+                    } else {
+                        if (0 != response.status) {
+                            this.toast(response.errorMsg);
+                        }
+                        if (0 != response.subStatus) {
+                            this.toast(response.subErrorMsg);
+                        }
+                    }
+                }).catch((err) => {
+                    console.warn(err);
+                })
+            },
+            /**
+             * 功能 获取活动信息
+             * 参数 无
+             * 返回 无
+             **/
+            getActivity() {
+                //* 校验输入的充值金额
+                if(!this.CONST.REGEX.money.test(this.chargeMoney)){
+                    this.toast(this.CONST.MSG.chargeMoneyCheck);
+                    return false;
+                }
+                //* 设定加载提示信息
+                this.loadingMsg = this.CONST.MSG.commonLoading;
+                //* 发送请求
+                this.post(this.CONST.BASE_URL, this.getSendData({
+                    userId: localStorage.getItem('id') || 'not login',
+                    permissionId: localStorage.getItem('token') || 'not login',
+                    userName: localStorage.getItem('username') || 'not login',
+                    merchantId: sessionStorage.getItem('merchantId') || 'no merchantId',
+                    merchantName: sessionStorage.getItem('merchantName') || 'no merchantName',
+                    goods: [{
+                        goodId: '1',
+                        goodName: 'time river',
+                        num: 1,
+                        price: this.chargeMoney
+                    }]
+                }, this.CONST.APP_ID, this.CONST.METHOD.getActivity, this.CONST.PWD), this).then((response) => {
+                    console.log('访问成功');
+                    console.log(response);
+                    if (0 == response.subStatus && 0 == response.status) {
+                        let finalMoney = response.data.goods[0].realPrice * response.data.goods[0].num - response.data.goods[0].favmoney;
+                        console.log(finalMoney)
+                        //* 发送下单请求
+                        this.addOrder(finalMoney);
+                    } else {
+                        if (0 != response.status) {
+                            this.toast(response.errorMsg);
+                        }
+                        if (0 != response.subStatus) {
+                            this.toast(response.subErrorMsg);
+                        }
+                    }
+                }).catch((err) => {
+                    console.warn(err);
+                })
+            },
+        },
+        mixins: [util]
+    }
+
+</script>

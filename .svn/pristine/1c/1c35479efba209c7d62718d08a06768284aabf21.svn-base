@@ -1,0 +1,130 @@
+<style lang="less" scoped>
+    @import "../../assets/less/config";
+
+    #postCardPage .guide-box .title {
+        color: #7f6d51;
+        padding: 15%;
+        text-align: center;
+    }
+
+    #postCardPage.content {
+        background-color: #fffdfd;
+    }
+
+    #postCardPage .guide-box {
+        height: 100px;
+        font-size: 20px;
+    }
+
+    #postCardPage .card-box {
+        margin: 10px;
+        padding: 3px;
+        background-color: white;
+        border-radius: 5px;
+        height: 150px;
+        display: flex;
+        align-items: center;
+    }
+
+    #postCardPage .card-box .card-cover {
+        text-align: center;
+    }
+
+    #postCardPage .card-box .card-cover img {
+        max-height: 100%;
+        width: 70%;
+    }
+
+    #postCardPage .card-box .select-box {}
+
+    #postCardPage .card-box .select-box .custom-radio {
+        position: relative;
+        left: 20px;
+    }
+
+    #postCardPage .card-box .select-box .custom-radio input {
+        position: absolute;
+        left: 2px;
+        top: 2px;
+        margin: 0;
+    }
+
+    #postCardPage .card-box .select-box .custom-checkbox label,
+    .custom-radio label {
+        background: url(../../assets/images/login/radiobutton.gif) no-repeat;
+        background-position: -10px -14px;
+    }
+
+    #postCardPage .card-box .select-box .custom-radio label.checked {
+        background-position: -10px -214px;
+    }
+
+    #postCardPage .card-box .select-box .custom-radio label {
+        display: block;
+        position: relative;
+        font-size: 1.3em;
+        line-height: 1;
+        height: 25px;
+        width: 25px;
+        cursor: pointer;
+    }
+
+    #postCardPage h1 {
+        color: #d4255c;
+        margin-bottom: 20px;
+    }
+
+    #postCardPage p {
+        color: #d68231;
+    }
+
+    #postCardPage .submit-btn {
+        margin-top: 70px;
+        text-align: center;
+    }
+
+</style>
+<template>
+    <div>
+        <v-header title=""></v-header>
+        <v-content id="postCardPage">
+            <!--* 会员卡标题 *-->
+            <div class="guide-box">
+                <p class="title">{{CONST.APP_NAME}}会员卡</p>
+            </div>
+            <!--* 会员卡封面 *-->
+            <div class="card-box">
+                <div class="card-cover">
+                <img :src="selectCard" >
+                </div>
+            </div>
+            <!--* 会员卡说明文字 *-->
+            <div class="submit-btn">
+                <h1>温馨提示</h1>
+                <p>您的会员卡打印申请已经收到</p>
+                <p>请您耐心等待，5-7个工作日，邮寄到您手中</p>
+                <p>请注意查收，谢谢您的支持</p>
+            </div>
+        </v-content>
+    </div>
+</template>
+<script>
+    //* 引用工具函数包并以混入的形式加载
+    import util from '../../assets/js/util'
+
+    export default {
+        data() {
+            return {
+                //* 选择卡片模板图片路径
+                selectCard: '../../../static/img/login/card1.png',
+            }
+        },
+        mounted() {
+            //* 获取用户选择的卡片模板
+            this.selectCard = '../../../static/img/login/card' + (localStorage.getItem('selectCardNo') || '1') + '.png';
+        },
+        methods: {},
+        mixins: [util]
+    }
+
+</script>

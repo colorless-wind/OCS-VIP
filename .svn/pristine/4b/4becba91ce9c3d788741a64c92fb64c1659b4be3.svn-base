@@ -1,0 +1,224 @@
+<style lang="less" scoped>
+    @import "../../assets/less/config";
+
+    #loginPage .form {
+        width: 80%;
+        padding: 0 10%;
+    }
+
+    #loginPage .line {
+        padding: 20px 0;
+        text-align: center;
+        position: relative;
+    }
+
+    #loginPage .icon {
+        width: 20px;
+        position: absolute;
+        top: 28px;
+        left: 10px;
+    }
+
+    @media (max-width:320px) {
+        #loginPage .line {
+            padding: 10px 0;
+            text-align: center;
+            position: relative;
+        }
+        #loginPage .icon {
+            width: 20px;
+            position: absolute;
+            top: 18px;
+            left: 10px;
+        }
+    }
+
+    #loginPage .text {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 5px 45px;
+        line-height: 28px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+        background-color: aliceblue;
+    }
+
+    #loginPage .btn {
+        width: 50%;
+        line-height: 38px;
+        border-radius: 5px;
+        /*border: 1px solid darken(@main, 3%);*/
+        border: none;
+        font-size: 14px;
+        color: #fff;
+        background: #62a8ea;
+    }
+
+    #loginPage .banner {
+        width: 100%;
+        margin-bottom: 30px;
+    }
+
+    #loginPage .forgot-pwd {
+        float: left;
+        padding-left: 20px;
+        color: #999;
+    }
+
+    #loginPage .reg-new-account {
+        float: right;
+        padding-right: 20px;
+        color: #999;
+    }
+
+</style>
+<template>
+	<div>
+		<v-header title=""></v-header>
+		<v-content id="loginPage">
+            <!--* banner *-->
+			<img src="../../assets/images/login/banner.jpg" class="banner" />
+			<form class="form" @submit.prevent="submit">
+                <!--* 用户名 *-->
+				<div class="line">
+					<img src="../../assets/images/login/phone.png" class="icon" />
+					<input class="text" type="tel" :placeholder="CONST.PLACEHOLDER.phone" maxlength="11" v-model="form.username">
+				</div>
+                <!--* 密码 *-->
+				<div class="line">
+					<img src="../../assets/images/login/password.png" class="icon" />
+					<input class="text" type="password" :placeholder="CONST.PLACEHOLDER.pwd" maxlength="11" v-model="form.password">
+				</div>
+                <!--* 登录按钮 *-->
+				<div class="line">
+					<button class="btn" type="button" @click="login">登录</button>
+				</div>
+                <!--* 其它链接按钮 *-->
+				<div class="line">
+					<span class="forgot-pwd" @click="goReset">忘记了密码？</span><span class="reg-new-account" @click="goReg">注册新账号</span>
+				</div>
+			</form>
+		</v-content>
+        <!--* 加载动画 load true/false 显示/隐藏；type 1-7 7种样式 *-->
+        <v-loading :type="1" :load="loading" :msg="loadingMsg"></v-loading>
+	</div>
+</template>
+<script>
+    //* 引用工具函数包并以混入的形式加载
+    import util from '../../assets/js/util'
+
+    export default {
+        data() {
+            return {
+                //* 提交表单信息
+                form: {
+                    username: '',
+                    password: '',
+                },
+                //* 是否启用加载动画
+                enableLoading: true,
+                //* 加载动画显示状态
+                loading: false,
+                //* 加载动画提示文字
+                loadingMsg: '',
+            }
+        },
+        methods: {
+            /**
+             * 功能 登录会员卡中心
+             * 参数 无
+             * 返回 无
+             **/
+            login() {
+                //* 校验手机号格式
+                if (!this.CONST.REGEX.phone.test(this.form.username)) {
+                    this.toast(this.CONST.MSG.phoneCheck);
+                    return false;
+                }
+                //* 校验密码格式
+                if (!this.CONST.REGEX.pwd.test(this.form.password)) {
+                    this.toast(this.CONST.MSG.pwdCheck);
+                    return false;
+                }
+                //* 设定加载提示信息
+                this.loadingMsg = this.CONST.MSG.loginLoading;
+                //* 发送登录请求
+                this.post(this.CONST.BASE_URL, this.getSendData({
+                    username: this.form.username,
+                    password: this.$md5(this.form.password),
+                }, this.CONST.APP_ID, this.CONST.METHOD.login, this.CONST.PWD), this).then((response) => {
+                    console.log('访问成功');
+                    console.log(response);
+                    if (0 == response.subStatus && 0 == response.status) {
+                        this.toast(this.CONST.MSG.loginSuccess);
+                        localStorage.setItem('token', response.data.token);
+                        localStorage.setItem('tokenmd5', this.$md5(response.data.token));
+                        localStorage.setItem('id', response.data.id);
+                        localStorage.setItem('username', response.data.username);
+                        //* 登录成功跳转
+                        this.goIndex();
+                        /*if (sessionStorage.getItem('skipAd')) {
+                            //* 已经浏览过广告跳转主页
+                            this.goIndex();
+                        } else {
+                            //* 未浏览过广告跳转广告页
+                            this.goAd();
+                        }*/
+                    } else {
+                        if (0 != response.status) {
+                            this.toast(response.errorMsg);
+                        }
+                        if (0 != response.subStatus) {
+                            this.toast(response.subErrorMsg);
+                        }
+                    }
+                }).catch((err) => {
+                    console.warn(err);
+                })
+            },
+            /**
+             * 功能 跳转注册页面
+             * 参数 无
+             * 返回 无
+             **/
+            goReg() {
+                this.$router.push({
+                    path: this.CONST.ROUTER.registerPage
+                })
+            },
+            /**
+             * 功能 跳转广告页面
+             * 参数 无
+             * 返回 无
+             **/
+            goAd() {
+                this.$router.push({
+                    path: this.CONST.ROUTER.adPage
+                })
+            },
+            /**
+             * 功能 跳转主页面
+             * 参数 无
+             * 返回 无
+             **/
+            goIndex() {
+                this.$router.push({
+                    path: this.CONST.ROUTER.indexPage
+                })
+            },
+            /**
+             * 功能 跳转重置密码页面
+             * 参数 无
+             * 返回 无
+             **/
+            goReset() {
+                this.$router.push({
+                    path: this.CONST.ROUTER.resetPage
+                })
+            }
+        },
+        mixins: [util]
+    }
+
+</script>
